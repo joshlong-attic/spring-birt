@@ -29,6 +29,10 @@ public class BirtView extends AbstractView {
     private String reportFormatRequestParameter = "ReportFormat";
     private IRenderOption renderOptions;
 
+    public void setReportsDirectory(String reportsDirectory) {
+        this.reportsDirectory = reportsDirectory;
+    }
+
     public void setRenderOptions(IRenderOption ro) {
         this.renderOptions = ro;
     }
