@@ -13,11 +13,12 @@ import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 /**
+ *
+ *
  * @author Jason Weathersby
  * @author Josh Long
  */
 public class BirtView extends AbstractView {
-
 
     public static final String PARAM_ISNULL = "__isnull";
     public static final String UTF_8_ENCODE = "UTF-8";
@@ -51,6 +52,7 @@ public class BirtView extends AbstractView {
         this.imagesDirectory = imagesDirectory;
     }
 
+    @SuppressWarnings("unchecked")
     protected void renderMergedOutputModel( Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         String reportName = request.getParameter(this.reportNameRequestParameter);
@@ -93,7 +95,6 @@ public class BirtView extends AbstractView {
                 FileWriter fstream = new FileWriter("c:/test/out.txt");
                 BufferedWriter out = new BufferedWriter(fstream);
                 out.write("Hello Java " + format + "--" + birtEngine.getMIMEType(format));
-                //Close the output stream
                 out.close();
             } catch (Exception e) {//Catch exception if any
                 System.err.println("Error: " + e.getMessage());

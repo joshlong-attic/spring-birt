@@ -23,17 +23,19 @@ public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/reports").setViewName("birtView");
-     }
+    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-      registry.addResourceHandler("images/*png").addResourceLocations("/images/");
+        for (String s : "png,jpg,gif".split(","))
+            registry.addResourceHandler("images/*" + s).addResourceLocations("/images/");
     }
 
     @Bean
     public BirtView birtView() {
         BirtView view = new BirtView();
         view.setBirtEngine(this.engine().getObject());
+
         return view;
     }
 
