@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.BeanNameViewResolver;
 
 @EnableWebMvc
-@ComponentScan( basePackageClasses = { BirtWebConfiguration.class   })
+@ComponentScan(basePackageClasses = {BirtWebConfiguration.class})
 @Configuration
 public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
 
