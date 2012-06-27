@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.BeanNameViewResolver;
 
 @EnableWebMvc
-@ComponentScan({"org.eclipse.birt.spring.core", "org.eclipse.birt.spring.example"})
+@ComponentScan( basePackageClasses = { BirtWebConfiguration.class   })
 @Configuration
 public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
 
@@ -41,12 +41,7 @@ public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     protected BirtEngineFactory engine() {
-        BirtEngineFactory factory = new BirtEngineFactory();
-        //factory.setLogLevel( Level.FINEST);
-        //factory.setLogDirectory ( new File ("c:/logs"));
-        //factory.setLogDirectory( new FileSystemResource("/logs"));
-
-        return factory;
+        return new BirtEngineFactory();
     }
 
 
