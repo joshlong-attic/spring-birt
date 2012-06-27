@@ -24,6 +24,7 @@ public class BirtView extends AbstractView {
 
     private IReportEngine birtEngine;
     private String reportNameRequestParameter = "ReportName";
+    private String imagesDirectory = "images" ;
     private String reportFormatRequestParameter = "ReportFormat";
     private IRenderOption renderOptions;
 
@@ -41,9 +42,11 @@ public class BirtView extends AbstractView {
         this.reportNameRequestParameter = rn;
     }
 
-    protected void renderMergedOutputModel(
-            Map map, HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+    public void setImagesDirectory(String imagesDirectory) {
+        this.imagesDirectory = imagesDirectory;
+    }
+
+    protected void renderMergedOutputModel( Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         String reportName = request.getParameter(this.reportNameRequestParameter);
         String format = request.getParameter(this.reportFormatRequestParameter);
@@ -64,8 +67,8 @@ public class BirtView extends AbstractView {
             htmlOptions.setOutputFormat("html");
             htmlOptions.setOutputStream(response.getOutputStream());
             htmlOptions.setImageHandler(new HTMLServerImageHandler());
-            htmlOptions.setBaseImageURL(request.getContextPath() + "/images");
-            htmlOptions.setImageDirectory(sc.getRealPath("/images"));
+            htmlOptions.setBaseImageURL(request.getContextPath() + "/"+ imagesDirectory);
+            htmlOptions.setImageDirectory(sc.getRealPath("/"+ imagesDirectory));
             runAndRenderTask.setRenderOption(htmlOptions);
 
         } else if (format.equalsIgnoreCase("pdf")) {
@@ -144,7 +147,8 @@ public class BirtView extends AbstractView {
         assert request != null && name != null;
 
         String value = getParameter(request, name);
-        if (value == null || value.length() <= 0) // Treat
+        if (value == null || value.length() <= 0)
+         // Treat
         // it as blank value.
         {
             value = ""; //$NON-NLS-1$

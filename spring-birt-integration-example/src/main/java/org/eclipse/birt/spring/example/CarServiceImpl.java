@@ -3,8 +3,13 @@ package org.eclipse.birt.spring.example;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author Jason Weathersby
+ * @author Josh Long
+ */
 public class CarServiceImpl implements CarService {
 
+    // todo make this data come from a data source
     public List<Car> getAllCars() {
         Car car1 = new Car();
         car1.setYear("2000");
