@@ -14,23 +14,39 @@ import org.springframework.util.Assert;
 
 import java.io.File;
 import java.io.IOException;
-
+import java.util.logging.Level;
 
 /**
  * Spring {@link FactoryBean} for the shared, singleton instance of the {@link IReportEngine report engine}.
+ * <p/>
+ * There should be one {@link IReportEngine} per JVM.
  *
  * @author Jason Weathersby
  * @author Josh Long
- *
  */
 public class BirtEngineFactory implements FactoryBean<IReportEngine>, ApplicationContextAware, DisposableBean {
 
+    public static final String DEFAULT_SPRING_APPLICATION_CONTEXT_KEY = "spring";
+
+    /**
+     * Attribute under which the Spring {@link ApplicationContext application context} is exposed for BIRT reports.
+     */
+    private String exposedSpringApplicationContextKey = DEFAULT_SPRING_APPLICATION_CONTEXT_KEY;
+
+    // guard the engine reference initialization
+    private final Object monitor = new Object();
+
+    // we need this reference to expose it to BIRT
     private ApplicationContext context;
 
-    private IReportEngine birtEngine;
-    private Resource logDirectory;
-    private File _resolvedDirectory;
-    private java.util.logging.Level logLevel;
+    // the reference
+    private IReportEngine engine;
+
+    // the directory where the logging should be stored.
+    private File logDirectory;
+
+    // what level should logging be done at?
+    private Level logLevel;
 
     public void setApplicationContext(ApplicationContext ctx) {
         this.context = ctx;
@@ -40,61 +56,63 @@ public class BirtEngineFactory implements FactoryBean<IReportEngine>, Applicatio
         return true;
     }
 
+    public void setExposedSpringApplicationContextKey(String exposedSpringApplicationContextKey) {
+        Assert.notNull(exposedSpringApplicationContextKey, "you must provide a valid value for the 'exposedSpringApplicationContextKey' attribute");
+        this.exposedSpringApplicationContextKey = exposedSpringApplicationContextKey;
+    }
+
     public void destroy() throws Exception {
-        birtEngine.destroy();
+        engine.destroy();
         Platform.shutdown();
     }
 
-    public void setLogLevel(java.util.logging.Level ll) {
+    public void setLogLevel(Level ll) {
         this.logLevel = ll;
     }
 
-    public void setLogDirectory(org.springframework.core.io.Resource resource) {
-        File f = null;
+    public void setLogDirectory(Resource resource) {
         try {
-            f = resource.getFile();
-            validateLogDirectory(f);
-            this._resolvedDirectory = f;
+            File file = resource.getFile();
+            setLogDirectory(file);
         } catch (IOException e) {
-            throw new RuntimeException("couldn�t set the log directory");
+            throw new RuntimeException("couldn't set the log directory");
         }
-
     }
 
-    private void validateLogDirectory(File f) {
-        Assert.notNull(f, " the directory must not be null");
-        Assert.isTrue(f.isDirectory(), " the path given must be a directory");
-        Assert.isTrue(f.exists(), "the path specified must exist!");
-    }
-
-    public void setLogDirectory(java.io.File f) {
+    public void setLogDirectory(File f) {
         validateLogDirectory(f);
-        this._resolvedDirectory = f;
+        this.logDirectory = f;
     }
 
+    @SuppressWarnings("unchecked")
     public IReportEngine getObject() {
+        synchronized (this.monitor) {
 
-        EngineConfig config = new EngineConfig();
+            if (this.engine != null)
+                return this.engine;
 
-        //This line injects the Spring Context into the BIRT Context
-        config.getAppContext().put("spring", this.context);
-        config.setLogConfig(null != this._resolvedDirectory ? this._resolvedDirectory.getAbsolutePath() : null, this.logLevel);
-        try {
-            Platform.startup(config);
-        } catch (BirtException e) {
-            throw new RuntimeException("Could not start the Birt engine!", e);
+            EngineConfig config = new EngineConfig();
+            config.getAppContext().put(this.exposedSpringApplicationContextKey, this.context);
+            config.setLogConfig(null != this.logDirectory ? this.logDirectory.getAbsolutePath() : null, this.logLevel);
+            try {
+                Platform.startup(config);
+            } catch (BirtException e) {
+                throw new RuntimeException("Could not start the BIRT engine.", e);
+            }
+            IReportEngineFactory factory = (IReportEngineFactory) Platform.createFactoryObject(IReportEngineFactory.EXTENSION_REPORT_ENGINE_FACTORY);
+            this.engine = factory.createReportEngine(config);
         }
-
-        IReportEngineFactory factory = (IReportEngineFactory) Platform.createFactoryObject(IReportEngineFactory.EXTENSION_REPORT_ENGINE_FACTORY);
-        IReportEngine be = factory.createReportEngine(config);
-        this.birtEngine = be;
-
-
-        return be;
+        return this.engine;
     }
 
     @Override
     public Class<?> getObjectType() {
         return IReportEngine.class;
+    }
+
+    private void validateLogDirectory(File directoryFile) {
+        Assert.notNull(directoryFile, "the directory must not be null");
+        Assert.isTrue(directoryFile.isDirectory(), "the path given must be a directory");
+        Assert.isTrue(directoryFile.exists(), "the path specified must exist");
     }
 }
