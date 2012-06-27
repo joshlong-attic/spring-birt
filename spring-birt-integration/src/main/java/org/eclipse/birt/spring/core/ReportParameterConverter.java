@@ -13,12 +13,10 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- *
  * Utility class to convert report parameter values between object and string.
  *
  * @author Jason Weathersby
  * @author Josh Long
- *
  */
 public class ReportParameterConverter {
 
@@ -42,8 +40,8 @@ public class ReportParameterConverter {
     /**
      * Constructor.
      *
-     * @param format     the character format to use when encoding
-     * @param uLocale  an instance of BIRT's {@link ULocale ULocale} class, which provides extra functionality over the JDK {@link Locale locale}.
+     * @param format  the character format to use when encoding
+     * @param uLocale an instance of BIRT's {@link ULocale ULocale} class, which provides extra functionality over the JDK {@link Locale locale}.
      */
     public ReportParameterConverter(String format, ULocale uLocale) {
         this(format, uLocale, null);

@@ -13,10 +13,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 /**
- *
  * @author Jason Weathersby
  * @author Josh Long
- *
  */
 public class BirtView extends AbstractView {
 

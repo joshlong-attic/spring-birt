@@ -45,19 +45,5 @@
             <artifactId>org.eclipse.birt.runtime</artifactId>
         </dependency>
     </dependencies>
-    <repositories>
-        <repository>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </snapshots>
-            <id>sonatype-nexus-releases</id>
-            <name>Sonatype Nexus Snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/releases</url>
-        </repository>
-    </repositories>
+
 </project>
