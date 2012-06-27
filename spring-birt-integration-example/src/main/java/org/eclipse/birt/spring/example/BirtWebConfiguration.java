@@ -10,37 +10,33 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.BeanNameViewResolver;
 
+/**
+ * @author
+ */
 @EnableWebMvc
 @ComponentScan(basePackageClasses = {BirtWebConfiguration.class})
 @Configuration
 public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
 
-    //@Autowired private CarService carService ;
-
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/reports").setViewName("birtView");
-
     }
 
     @Bean
     public BirtView birtView() {
-        BirtView bv = new BirtView();
-        //bv.setReportFormatRequestParameter("ReportFormat");
-        //bv.setReportNameRequestParameter("ReportName");
-        bv.setBirtEngine(this.engine().getObject());
-        return bv;
+        BirtView view = new BirtView();
+        view.setBirtEngine(this.engine().getObject());
+        return view;
     }
-
 
     @Bean
     public BeanNameViewResolver beanNameResolver() {
-        BeanNameViewResolver br = new BeanNameViewResolver();
-        return br;
+        return new BeanNameViewResolver();
     }
 
     @Bean
-    protected BirtEngineFactory engine() {
+    public BirtEngineFactory engine() {
         return new BirtEngineFactory();
     }
 

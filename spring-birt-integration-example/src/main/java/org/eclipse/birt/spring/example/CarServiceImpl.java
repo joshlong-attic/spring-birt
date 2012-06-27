@@ -18,9 +18,6 @@ public class CarServiceImpl implements CarService {
         car3.setYear("2002");
         car3.setMake("Ford");
         car3.setModel("Mustang GT");
-        List<Car> cars = Arrays.asList(car1, car2, car3);
-        return cars;
-
-
+        return Arrays.asList(car1, car2, car3);
     }
 }
