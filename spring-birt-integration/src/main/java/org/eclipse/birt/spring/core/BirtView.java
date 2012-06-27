@@ -25,6 +25,7 @@ public class BirtView extends AbstractView {
     private IReportEngine birtEngine;
     private String reportNameRequestParameter = "ReportName";
     private String imagesDirectory = "images" ;
+    private String reportsDirectory = "reports";
     private String reportFormatRequestParameter = "ReportFormat";
     private IRenderOption renderOptions;
 
@@ -56,7 +57,7 @@ public class BirtView extends AbstractView {
         }
 
         IReportRunnable runnable = null;
-        runnable = birtEngine.openReportDesign(sc.getRealPath("/Reports") + "/" + reportName);
+        runnable = birtEngine.openReportDesign(sc.getRealPath("/"+ reportsDirectory) + "/" + reportName);
         IRunAndRenderTask runAndRenderTask = birtEngine.createRunAndRenderTask(runnable);
         runAndRenderTask.setParameterValues(discoverAndSetParameters(runnable, request));
 
@@ -78,13 +79,11 @@ public class BirtView extends AbstractView {
             pdfOptions.setOutputStream(response.getOutputStream());
             runAndRenderTask.setRenderOption(pdfOptions);
         } else {
-
             String att = "download." + format;
             String uReportName = reportName.toUpperCase();
             if (uReportName.endsWith(".RPTDESIGN")) {
                 att = uReportName.replace(".RPTDESIGN", "." + format);
             }
-
             try {
                 // Create file
                 FileWriter fstream = new FileWriter("c:/test/out.txt");
