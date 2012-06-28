@@ -11,9 +11,7 @@ import org.springframework.web.servlet.view.AbstractView;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedWriter;
 import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.util.*;
 
 
@@ -23,7 +21,10 @@ import java.util.*;
  * @author Jason Weathersby
  * @author Josh Long
  */
-public class AbstractBirtView extends AbstractView implements InitializingBean  {
+abstract public class AbstractBirtView extends AbstractView implements InitializingBean {
+
+    private boolean useWriter = false;
+
     private IReportEngine birtEngine;
     private String reportNameRequestParameter = "reportName";
     private String imagesDirectory = "images";
@@ -31,9 +32,17 @@ public class AbstractBirtView extends AbstractView implements InitializingBean  
     private String resourceDirectory = "resources";
     private String isNullParameterName = "__isnull";
     private String reportFormatRequestParameter = "reportFormat";
-    private IRenderOption renderOptions;
-    private BirtViewResourcePathCallback birtViewResourcePathCallback;
+    protected BirtViewResourcePathCallback birtViewResourcePathCallback;
+    protected IHTMLActionHandler actionHandler;
     private String requestEncoding = "UTF-8";
+
+    public void setNullParameterName(String nullParameterName) {
+        isNullParameterName = nullParameterName;
+    }
+
+    public void setBirtViewResourcePathCallback(BirtViewResourcePathCallback birtViewResourcePathCallback) {
+        this.birtViewResourcePathCallback = birtViewResourcePathCallback;
+    }
 
     /**
      * Perform common validation on the state of this object
@@ -45,8 +54,14 @@ public class AbstractBirtView extends AbstractView implements InitializingBean  
         Assert.hasText(this.reportFormatRequestParameter, "the 'reportFormatRequestParameter' must not be null");
         Assert.hasText(this.reportNameRequestParameter, "the 'reportNameRequestParameter' must not be null");
 
-        if (birtViewResourcePathCallback == null)
-            birtViewResourcePathCallback = new SimpleBirtViewResourcePathPathCallback(reportsDirectory, imagesDirectory, resourceDirectory);
+        if (null == this.renderOption)
+            this.renderOption = new RenderOption();
+
+        if (null == this.actionHandler)
+            this.actionHandler = new SpringActionHandler(this.reportNameRequestParameter, this.reportFormatRequestParameter);
+
+        if (null == birtViewResourcePathCallback)
+            this.birtViewResourcePathCallback = new SimpleBirtViewResourcePathPathCallback(this.reportsDirectory, this.imagesDirectory, this.resourceDirectory);
     }
 
     public void setRequestEncoding(String r) {
@@ -65,10 +80,6 @@ public class AbstractBirtView extends AbstractView implements InitializingBean  
         this.reportsDirectory = reportsDirectory;
     }
 
-    public void setRenderOptions(IRenderOption ro) {
-        this.renderOptions = ro;
-    }
-
     public void setReportFormatRequestParameter(String rf) {
         this.reportFormatRequestParameter = rf;
     }
@@ -81,6 +92,9 @@ public class AbstractBirtView extends AbstractView implements InitializingBean  
         this.imagesDirectory = imagesDirectory;
     }
 
+    /**
+     * Marker interface used to provide callback hooks for certain resolution chores.
+     */
     public static interface BirtViewResourcePathCallback {
 
         String baseImageUrl(ServletContext sc, HttpServletRequest r, String reportName) throws Throwable;
@@ -130,31 +144,67 @@ public class AbstractBirtView extends AbstractView implements InitializingBean  
 
     }
 
+    public void setHtmlActionHandler(IHTMLActionHandler actionHandler) {
+        this.actionHandler = actionHandler;
+    }
+
+
+    abstract protected RenderOption renderReport(Map map, HttpServletRequest request, HttpServletResponse response,
+                                                 BirtViewResourcePathCallback resourcePathCallback, Map<String, Object> appContextValuesMap,
+                                                 String reportName, String format, IRenderOption options) throws Throwable;
+
+
+    public void setRenderOption(IRenderOption renderOption) {
+        this.renderOption = renderOption;
+    }
+
+    private IRenderOption renderOption;
+
     @SuppressWarnings("unchecked")
     protected void renderMergedOutputModel(Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        FileInputStream fis = null ;
+        FileInputStream fis = null;
         try {
             String reportName = request.getParameter(this.reportNameRequestParameter);
             String format = request.getParameter(this.reportFormatRequestParameter);
-            ServletContext sc = request.getSession().getServletContext();
+            ServletContext sc = request.getServletContext(); /// avoid creating an HTTP session if possible.
             if (format == null) {
                 format = "html";
             }
 
-            Map<String, Object> moptions = new HashMap<String, Object>();
-            moptions.put(IModuleOption.RESOURCE_FOLDER_KEY, birtViewResourcePathCallback.resourceDirectory(sc, request, reportName));
-            moptions.put(IModuleOption.PARSER_SEMANTIC_CHECK_KEY, Boolean.FALSE);
+            Map<String, Object> mapOfOptions = new HashMap<String, Object>();
+            mapOfOptions.put(IModuleOption.RESOURCE_FOLDER_KEY, birtViewResourcePathCallback.resourceDirectory(sc, request, reportName));
+            mapOfOptions.put(IModuleOption.PARSER_SEMANTIC_CHECK_KEY, Boolean.FALSE);
+
             fis = new FileInputStream(birtViewResourcePathCallback.pathForReport(sc, request, reportName));
-            IReportRunnable runnable = birtEngine.openReportDesign(reportName, fis, moptions);
+            IReportRunnable runnable = birtEngine.openReportDesign(reportName, fis, mapOfOptions);
             IRunAndRenderTask runAndRenderTask = birtEngine.createRunAndRenderTask(runnable);
             runAndRenderTask.setParameterValues(discoverAndSetParameters(runnable, request));
 
-            response.setContentType(birtEngine.getMIMEType(format));
-            IRenderOption options = null == this.renderOptions ? new RenderOption() : this.renderOptions;
-            SpringActionHandler sAH = new SpringActionHandler(this.reportNameRequestParameter, this.reportFormatRequestParameter);
-            options.setActionHandler(sAH);
+            // set content type
+            String contentType = birtEngine.getMIMEType(format);
+            response.setContentType(contentType);
+            setContentType(contentType);
 
-            if (format.equalsIgnoreCase("html")) {
+
+            Map<String, Object> appContextValuesToPutInApplicationContextDuringRunAndRender = new HashMap<String, Object>();
+            appContextValuesToPutInApplicationContextDuringRunAndRender.put(EngineConstants.APPCONTEXT_BIRT_VIEWER_HTTPSERVET_REQUEST, request);
+
+            IRenderOption options = null == this.renderOption ? new RenderOption() : this.renderOption;
+            options.setActionHandler(actionHandler);
+
+            IRenderOption returnedRenderOptions = renderReport(map, request, response, this.birtViewResourcePathCallback,
+                    appContextValuesToPutInApplicationContextDuringRunAndRender, reportName, format, options);
+
+            runAndRenderTask.setRenderOption(returnedRenderOptions);
+
+            for (String k : appContextValuesToPutInApplicationContextDuringRunAndRender.keySet())
+                runAndRenderTask.getAppContext().put(k, appContextValuesToPutInApplicationContextDuringRunAndRender.get(k));
+
+            runAndRenderTask.run();
+            runAndRenderTask.close();
+
+
+            /* if (format.equalsIgnoreCase("html")) {
                 HTMLRenderOption htmlOptions = new HTMLRenderOption(options);
                 htmlOptions.setOutputFormat("html");
                 htmlOptions.setOutputStream(response.getOutputStream());
@@ -188,19 +238,13 @@ public class AbstractBirtView extends AbstractView implements InitializingBean  
                 options.setOutputStream(response.getOutputStream());
                 options.setOutputFormat(format);
                 runAndRenderTask.setRenderOption(options);
-            }
-            runAndRenderTask.getAppContext().put(EngineConstants.APPCONTEXT_BIRT_VIEWER_HTTPSERVET_REQUEST, request);
-            //runAndRenderTask.getAppContext().put("birt.viewer.resource.path", birtViewResourcePathCallback.resourceDirectory(sc, request, reportName));
-            runAndRenderTask.run();
-            runAndRenderTask.close();
-
-            fis.close();
+            }*/
 
 
         } catch (Throwable th) {
             throw new RuntimeException(th); // nothing useful to do here
         } finally {
-            if(null !=fis) // todo who closes the InputStream?
+            if (null != fis) // todo who closes the InputStream?
                 IOUtils.closeQuietly(fis);
         }
     }

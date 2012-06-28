@@ -19,7 +19,9 @@ import java.util.*;
 /**
  * @author Jason Weathersby
  * @author Josh Long
+ *
  */
+@Deprecated
 public class BirtView extends AbstractView implements InitializingBean {
 
     private IReportEngine birtEngine;

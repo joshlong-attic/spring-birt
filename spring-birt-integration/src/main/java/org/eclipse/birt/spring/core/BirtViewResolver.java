@@ -1,6 +1,7 @@
 package org.eclipse.birt.spring.core;
 
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.view.AbstractUrlBasedView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 /**
@@ -10,4 +11,12 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
  * @author Josh Long
  */
 public class BirtViewResolver extends UrlBasedViewResolver {
+
+
+    @Override
+    protected Class requiredViewClass() {
+        return AbstractBirtView.class;
+    }
+
+
 }
