@@ -35,7 +35,6 @@ public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
     public BirtView birtView() {
         BirtView view = new BirtView();
         view.setBirtEngine(this.engine().getObject());
-
         return view;
     }
 

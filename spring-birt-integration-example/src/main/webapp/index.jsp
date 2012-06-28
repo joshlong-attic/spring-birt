@@ -10,6 +10,7 @@
     <c:url value="/reports?reportName=SampleSpring.rptdesign" var= "sampleSpring"/>
 
     <a href  ="${topNPercent}">The Top N Percent Report </a>
+    <br/>
     <a href  ="${sampleSpring}">Simple Spring-backed report </a>
 </p>
  </body>
