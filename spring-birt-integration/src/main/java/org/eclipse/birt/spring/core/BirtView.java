@@ -81,6 +81,9 @@ public class BirtView extends AbstractView implements InitializingBean {
         String imageDirectory(ServletContext sc, HttpServletRequest request, String reportName);
     }
 
+    /**
+     * Default implementation of the {@link BirtViewResourcePathCallback }
+     */
     public static class SimpleBirtViewResourcePathPathCallback implements BirtViewResourcePathCallback {
 
         private String reportFolder, imagesFolder;
@@ -132,9 +135,6 @@ public class BirtView extends AbstractView implements InitializingBean {
                 htmlOptions.setImageHandler(new HTMLServerImageHandler());
                 htmlOptions.setBaseImageURL(birtViewResourcePathCallback.baseImageUrl(sc, request, reportName));
                 htmlOptions.setImageDirectory(birtViewResourcePathCallback.imageDirectory(sc, request, reportName));
-
-//                htmlOptions.setBaseImageURL( request.getContextPath() + "/" + imagesDirectory);
-//                htmlOptions.setImageDirectory(sc.getRealPath("/" + imagesDirectory));
                 runAndRenderTask.setRenderOption(htmlOptions);
 
             } else if (format.equalsIgnoreCase("pdf")) {
