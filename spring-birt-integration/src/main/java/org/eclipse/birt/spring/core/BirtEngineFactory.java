@@ -7,6 +7,7 @@ import org.eclipse.birt.report.engine.api.IReportEngine;
 import org.eclipse.birt.report.engine.api.IReportEngineFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
@@ -23,7 +24,7 @@ import java.util.logging.Level;
  * @author Jason Weathersby
  * @author Josh Long
  */
-public class BirtEngineFactory implements FactoryBean<IReportEngine>, ApplicationContextAware, DisposableBean {
+public class BirtEngineFactory implements FactoryBean<IReportEngine>, ApplicationContextAware, DisposableBean , InitializingBean {
 
     public static final String DEFAULT_SPRING_APPLICATION_CONTEXT_KEY = "spring";
 
@@ -47,26 +48,8 @@ public class BirtEngineFactory implements FactoryBean<IReportEngine>, Applicatio
     // what level should logging be done at?
     private Level logLevel;
 
-    public void setApplicationContext(ApplicationContext ctx) {
-        this.context = ctx;
-    }
-
-    public boolean isSingleton() {
-        return true;
-    }
-
     public void setExposedSpringApplicationContextKey(String exposedSpringApplicationContextKey) {
-        Assert.notNull(exposedSpringApplicationContextKey, "you must provide a valid value for the 'exposedSpringApplicationContextKey' attribute");
         this.exposedSpringApplicationContextKey = exposedSpringApplicationContextKey;
-    }
-
-    public void destroy() throws Exception {
-        engine.destroy();
-        Platform.shutdown();
-    }
-
-    public void setLogLevel(Level ll) {
-        this.logLevel = ll;
     }
 
     public void setLogDirectory(Resource resource) {
@@ -78,9 +61,25 @@ public class BirtEngineFactory implements FactoryBean<IReportEngine>, Applicatio
         }
     }
 
+    public void setLogLevel(Level ll) {
+        this.logLevel = ll;
+    }
+
     public void setLogDirectory(File f) {
-        validateLogDirectory(f);
         this.logDirectory = f;
+    }
+
+    public void setApplicationContext(ApplicationContext ctx) {
+        this.context = ctx;
+    }
+
+    public boolean isSingleton() {
+        return true;
+    }
+
+    public void destroy() throws Exception {
+        engine.destroy();
+        Platform.shutdown();
     }
 
     @SuppressWarnings("unchecked")
@@ -108,9 +107,13 @@ public class BirtEngineFactory implements FactoryBean<IReportEngine>, Applicatio
         return IReportEngine.class;
     }
 
-    private void validateLogDirectory(File directoryFile) {
-        Assert.notNull(directoryFile, "the directory must not be null");
-        Assert.isTrue(directoryFile.isDirectory(), "the path given must be a directory");
-        Assert.isTrue(directoryFile.exists(), "the path specified must exist");
+    public void afterPropertiesSet() throws Exception {
+        // log directory
+        if(null !=logDirectory){
+        Assert.isTrue(logDirectory.isDirectory(), "the path given must be a directory");
+        Assert.isTrue(logDirectory.exists(), "the path specified must exist");
+        }
+        // required properties
+        Assert.notNull(exposedSpringApplicationContextKey, "you must provide a valid value for the 'exposedSpringApplicationContextKey' attribute");
     }
 }
