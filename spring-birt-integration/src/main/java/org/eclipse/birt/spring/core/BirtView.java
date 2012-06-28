@@ -1,6 +1,7 @@
 package org.eclipse.birt.spring.core;
 
 import org.eclipse.birt.report.engine.api.*;
+import org.eclipse.birt.report.model.api.IModuleOption;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -10,6 +11,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.util.*;
 
@@ -23,6 +25,7 @@ public class BirtView extends AbstractView implements InitializingBean {
     private String reportNameRequestParameter = "reportName";
     private String imagesDirectory = "images";
     private String reportsDirectory = "reports";
+    private String resourceDirectory = "resources";
     private String isNullParameterName = "__isnull";
     private String reportFormatRequestParameter = "reportFormat";
     private IRenderOption renderOptions;
@@ -41,14 +44,16 @@ public class BirtView extends AbstractView implements InitializingBean {
 
 
         if (birtViewResourcePathCallback == null)
-            birtViewResourcePathCallback = new SimpleBirtViewResourcePathPathCallback(reportsDirectory, imagesDirectory);
+            birtViewResourcePathCallback = new SimpleBirtViewResourcePathPathCallback(reportsDirectory, imagesDirectory, resourceDirectory);
 
     }
 
     public void setRequestEncoding(String r) {
         this.requestEncoding = r;
     }
-
+    public void setResourceDirectory(String resourceDirectory) {
+        this.resourceDirectory = resourceDirectory;
+    }
     public void setReportsDirectory(String reportsDirectory) {
         this.reportsDirectory = reportsDirectory;
     }
@@ -76,9 +81,15 @@ public class BirtView extends AbstractView implements InitializingBean {
     public static interface BirtViewResourcePathCallback {
         String baseImageUrl(ServletContext sc, HttpServletRequest r, String reportName) throws Throwable;
 
+        String baseUrl(ServletContext sc, HttpServletRequest r, String reportName) throws Throwable;
+        
         String pathForReport(ServletContext servletContext, HttpServletRequest r, String reportName) throws Throwable;
 
         String imageDirectory(ServletContext sc, HttpServletRequest request, String reportName);
+
+        String resourceDirectory(ServletContext sc, HttpServletRequest request, String reportName);
+        
+        
     }
 
     /**
@@ -86,10 +97,14 @@ public class BirtView extends AbstractView implements InitializingBean {
      */
     public static class SimpleBirtViewResourcePathPathCallback implements BirtViewResourcePathCallback {
 
-        private String reportFolder, imagesFolder;
+        private String reportFolder, imagesFolder, resourceFolder;
 
         public String baseImageUrl(ServletContext sc, HttpServletRequest request, String reportName) throws Throwable {
             return request.getContextPath() + "/" + imagesFolder;
+        }
+        
+        public String baseUrl(ServletContext sc, HttpServletRequest request, String reportName) throws Throwable {
+            return request.getRequestURI();
         }
 
         public String pathForReport(ServletContext sc, HttpServletRequest request, String reportName) throws Throwable {
@@ -99,12 +114,18 @@ public class BirtView extends AbstractView implements InitializingBean {
         public String imageDirectory(ServletContext sc, HttpServletRequest request, String reportName) {
             return sc.getRealPath("/" + imagesFolder);
         }
+        
+        public String resourceDirectory(ServletContext sc, HttpServletRequest request, String reportName) {
+            return sc.getRealPath("/" + resourceFolder);
+        }
 
-        public SimpleBirtViewResourcePathPathCallback(String f, String i) {
+        public SimpleBirtViewResourcePathPathCallback(String f, String i, String k) {
             this.reportFolder = f;
             this.imagesFolder = i;
+            this.resourceFolder = k;
             Assert.hasText(this.reportFolder, "you must provide a valid report folder value");
             Assert.hasText(this.imagesFolder, "you must provide a valid images folder value");
+            Assert.hasText(this.resourceFolder, "you must provide a valid resource folder value");
         }
     }
 
@@ -121,13 +142,20 @@ public class BirtView extends AbstractView implements InitializingBean {
             if (format == null) {
                 format = "html";
             }
-
-            IReportRunnable runnable = birtEngine.openReportDesign(birtViewResourcePathCallback.pathForReport(sc, request, reportName));
+            
+    		Map moptions = new HashMap( );
+    		moptions.put( IModuleOption.RESOURCE_FOLDER_KEY, birtViewResourcePathCallback.resourceDirectory(sc, request, reportName) );
+    		moptions.put( IModuleOption.PARSER_SEMANTIC_CHECK_KEY, Boolean.FALSE );
+    		FileInputStream fis = new FileInputStream(birtViewResourcePathCallback.pathForReport(sc, request, reportName));
+            IReportRunnable runnable = birtEngine.openReportDesign(reportName,fis, moptions);
             IRunAndRenderTask runAndRenderTask = birtEngine.createRunAndRenderTask(runnable);
             runAndRenderTask.setParameterValues(discoverAndSetParameters(runnable, request));
 
             response.setContentType(birtEngine.getMIMEType(format));
             IRenderOption options = null == this.renderOptions ? new RenderOption() : this.renderOptions;
+            SpringActionHandler sAH = new SpringActionHandler(this.reportNameRequestParameter,this.reportFormatRequestParameter );
+            options.setActionHandler(sAH);
+            
             if (format.equalsIgnoreCase("html")) {
                 HTMLRenderOption htmlOptions = new HTMLRenderOption(options);
                 htmlOptions.setOutputFormat("html");
@@ -135,6 +163,8 @@ public class BirtView extends AbstractView implements InitializingBean {
                 htmlOptions.setImageHandler(new HTMLServerImageHandler());
                 htmlOptions.setBaseImageURL(birtViewResourcePathCallback.baseImageUrl(sc, request, reportName));
                 htmlOptions.setImageDirectory(birtViewResourcePathCallback.imageDirectory(sc, request, reportName));
+                htmlOptions.setBaseURL(birtViewResourcePathCallback.baseUrl(sc, request, reportName));
+                
                 runAndRenderTask.setRenderOption(htmlOptions);
 
             } else if (format.equalsIgnoreCase("pdf")) {
@@ -165,8 +195,12 @@ public class BirtView extends AbstractView implements InitializingBean {
                 runAndRenderTask.setRenderOption(options);
             }
             runAndRenderTask.getAppContext().put(EngineConstants.APPCONTEXT_BIRT_VIEWER_HTTPSERVET_REQUEST, request);
+            //runAndRenderTask.getAppContext().put("birt.viewer.resource.path", birtViewResourcePathCallback.resourceDirectory(sc, request, reportName));
             runAndRenderTask.run();
             runAndRenderTask.close();
+           
+            fis.close();
+            
 
         } catch (Throwable th) {
             throw new RuntimeException(th); // nothing useful to do here

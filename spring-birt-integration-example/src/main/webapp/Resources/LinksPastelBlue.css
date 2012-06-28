@@ -1,0 +1,86 @@
+
+.table-header
+{
+background-color: #6078BF;
+font-family: Arial;
+font-size: small;
+font-weight: bold;
+padding: 0px 0px 0px 0px;
+color: #FFFFFF;
+}
+
+
+.table-footer
+{
+background-color: #6078BF;
+font-family: Arial;
+font-size: small;
+font-weight: bold;
+padding: 0px 0px 0px 0px;
+color: #FFFFFF;
+}
+
+.table-detail
+{
+background-color: #E6ECFF;
+font-family: Arial;
+font-size: x-small;
+font-weight: bold;
+padding: 0px 0px 0px 0px;
+color: #000080;
+}
+
+
+.table-group-header-1
+{
+background-color: #809FFF;
+font-family: Arial;
+font-size: small;
+font-weight: bold;
+padding: 0px 0px 0px 0px;
+color: #FFFFFF;
+}
+
+.table-group-footer-1
+{
+background-color: #809FFF;
+font-family: Arial;
+font-size: small;
+font-weight: bold;
+padding: 0px 0px 0px 0px;
+color: #FFFFFF;
+}
+
+.special-header
+{
+background-color: #6078BF;
+font-family: Arial;
+font-size: medium;
+font-weight: bold;
+padding: 0px 0px 0px 0px;
+color: #FFFFFF;
+}
+
+.crosstab-detail
+{
+background-color: #E6ECFF;
+font-family: Arial;
+font-size: x-small;
+font-weight: bold;
+padding: 0px 0px 0px 0px;
+color: #000080;
+}
+
+.crosstab-header
+{
+background-color: #6078BF;
+font-family: Arial;
+font-size: small;
+font-weight: bold;
+padding: 0px 0px 0px 0px;
+color: #FFFFFF;
+}
+a:hover, a:focus, a:active {
+  color : #000;
+  text-decoration : overline;
+}
