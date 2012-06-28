@@ -17,9 +17,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 /**
- * Spring {@link FactoryBean} for the shared, singleton instance of the {@link IReportEngine report engine}.
- * <p/>
- * There should be one {@link IReportEngine} per JVM.
+ * Spring {@link FactoryBean} for the shared, singleton instance of
+ * the {@link IReportEngine report engine}. There should be one {@link IReportEngine} per JVM.
  *
  * @author Jason Weathersby
  * @author Josh Long
