@@ -27,9 +27,6 @@ public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        //for (String s : "png,jpg,gif".split(","))
-            //registry.addResourceHandler("images/*" + s).addResourceLocations("/images/");
-
         registry.addResourceHandler("images/*").addResourceLocations("/images/");
     }
 

@@ -1,5 +1,7 @@
 package org.eclipse.birt.spring.example;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,6 +9,7 @@ import java.util.List;
  * @author Jason Weathersby
  * @author Josh Long
  */
+@Transactional
 public class CarServiceImpl implements CarService {
 
     // todo make this data come from a data source

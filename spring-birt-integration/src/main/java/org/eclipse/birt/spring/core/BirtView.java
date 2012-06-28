@@ -1,5 +1,6 @@
 package org.eclipse.birt.spring.core;
 
+import org.apache.commons.io.IOUtils;
 import org.eclipse.birt.report.engine.api.*;
 import org.eclipse.birt.report.model.api.IModuleOption;
 import org.springframework.beans.factory.InitializingBean;
@@ -38,22 +39,18 @@ public class BirtView extends AbstractView implements InitializingBean {
      * @throws Exception
      */
     public void afterPropertiesSet() throws Exception {
-        Assert.hasText(this.requestEncoding, "the requestEncoding must be set");
+        Assert.hasText(this.requestEncoding, "the 'requestEncoding' must be set");
         Assert.hasText(this.reportFormatRequestParameter, "the 'reportFormatRequestParameter' must not be null");
         Assert.hasText(this.reportNameRequestParameter, "the 'reportNameRequestParameter' must not be null");
 
         if (birtViewResourcePathCallback == null)
             birtViewResourcePathCallback = new SimpleBirtViewResourcePathPathCallback(reportsDirectory, imagesDirectory, resourceDirectory);
-
     }
 
     public void setRequestEncoding(String r) {
         this.requestEncoding = r;
     }
 
-    /**
-     * callback interface.
-     */
     public void setBirtEngine(IReportEngine birtEngine) {
         this.birtEngine = birtEngine;
     }
@@ -73,7 +70,6 @@ public class BirtView extends AbstractView implements InitializingBean {
     public void setReportFormatRequestParameter(String rf) {
         this.reportFormatRequestParameter = rf;
     }
-
 
     public void setReportNameRequestParameter(String rn) {
         this.reportNameRequestParameter = rn;
@@ -134,7 +130,7 @@ public class BirtView extends AbstractView implements InitializingBean {
 
     @SuppressWarnings("unchecked")
     protected void renderMergedOutputModel(Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+        FileInputStream fis = null ;
         try {
             String reportName = request.getParameter(this.reportNameRequestParameter);
             String format = request.getParameter(this.reportFormatRequestParameter);
@@ -143,10 +139,10 @@ public class BirtView extends AbstractView implements InitializingBean {
                 format = "html";
             }
 
-            Map moptions = new HashMap();
+            Map<String, Object> moptions = new HashMap<String, Object>();
             moptions.put(IModuleOption.RESOURCE_FOLDER_KEY, birtViewResourcePathCallback.resourceDirectory(sc, request, reportName));
             moptions.put(IModuleOption.PARSER_SEMANTIC_CHECK_KEY, Boolean.FALSE);
-            FileInputStream fis = new FileInputStream(birtViewResourcePathCallback.pathForReport(sc, request, reportName));
+            fis = new FileInputStream(birtViewResourcePathCallback.pathForReport(sc, request, reportName));
             IReportRunnable runnable = birtEngine.openReportDesign(reportName, fis, moptions);
             IRunAndRenderTask runAndRenderTask = birtEngine.createRunAndRenderTask(runnable);
             runAndRenderTask.setParameterValues(discoverAndSetParameters(runnable, request));
@@ -176,18 +172,15 @@ public class BirtView extends AbstractView implements InitializingBean {
             } else {
                 String att = "download." + format;
                 String uReportName = reportName.toUpperCase();
-                if (uReportName.endsWith(".RPTDESIGN")) {
-                    att = uReportName.replace(".RPTDESIGN", "." + format);
+                String rptDesignSuffix = ".RPTDESIGN";
+                if (uReportName.endsWith(rptDesignSuffix)) {
+                    att = uReportName.replace(rptDesignSuffix, "." + format);
                 }
-                try {
-                    // Create file
-                    FileWriter fstream = new FileWriter("c:/test/out.txt");
-                    BufferedWriter out = new BufferedWriter(fstream);
-                    out.write("Hello Java " + format + "--" + birtEngine.getMIMEType(format));
-                    out.close();
-                } catch (Exception e) {//Catch exception if any
-                    System.err.println("Error: " + e.getMessage());
-                }
+                // Create file
+                FileWriter fstream = new FileWriter("c:/test/out.txt");
+                BufferedWriter out = new BufferedWriter(fstream);
+                out.write("Hello Java " + format + "--" + birtEngine.getMIMEType(format));
+                out.close();
 
                 response.setHeader("Content-Disposition", "attachment; filename=\"" + att + "\"");
                 options.setOutputStream(response.getOutputStream());
@@ -204,6 +197,9 @@ public class BirtView extends AbstractView implements InitializingBean {
 
         } catch (Throwable th) {
             throw new RuntimeException(th); // nothing useful to do here
+        } finally {
+            if(null !=fis) // todo who closes the InputStream?
+                IOUtils.closeQuietly(fis);
         }
     }
 
