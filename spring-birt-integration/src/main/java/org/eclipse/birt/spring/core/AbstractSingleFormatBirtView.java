@@ -21,9 +21,7 @@ import java.util.*;
  * @author Jason Weathersby
  * @author Josh Long
  */
-abstract public class AbstractBirtView extends AbstractView implements InitializingBean {
-
-    private boolean useWriter = false;
+abstract public class AbstractSingleFormatBirtView extends AbstractView implements InitializingBean {
 
     private IReportEngine birtEngine;
     private String reportNameRequestParameter = "reportName";
@@ -38,6 +36,10 @@ abstract public class AbstractBirtView extends AbstractView implements Initializ
 
     public void setNullParameterName(String nullParameterName) {
         isNullParameterName = nullParameterName;
+    }
+
+    protected boolean useWriter(){
+        return false;// by default well render using the Response' outputstream
     }
 
     public void setBirtViewResourcePathCallback(BirtViewResourcePathCallback birtViewResourcePathCallback) {

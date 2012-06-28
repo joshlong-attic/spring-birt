@@ -16,9 +16,9 @@ import java.util.Map;
  * @author Josh Long
  * @author Jason Weathersby
  */
-public class HtmlBirtView extends AbstractBirtView {
+public class HtmlSingleFormatBirtView extends AbstractSingleFormatBirtView {
 
-    public HtmlBirtView() {
+    public HtmlSingleFormatBirtView() {
         setContentType("text/html");
     }
 

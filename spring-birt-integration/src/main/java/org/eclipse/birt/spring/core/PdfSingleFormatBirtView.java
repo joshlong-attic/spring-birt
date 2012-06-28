@@ -16,9 +16,9 @@ import java.util.Map;
  * @author Josh Long
  * @author Jason Weathersby
  */
-public class PdfBirtView extends AbstractBirtView  {
+public class PdfSingleFormatBirtView extends AbstractSingleFormatBirtView {
 
-    public PdfBirtView(){
+    public PdfSingleFormatBirtView(){
         setContentType("application/pdf");
     }
 
