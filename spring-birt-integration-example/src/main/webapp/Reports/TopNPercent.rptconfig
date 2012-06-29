@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
+    <list-property name="configVars">
+        <structure>
+            <property name="name">__isdisplay__Top Count_87_0</property>
+            <property name="value">5</property>
+        </structure>
+        <structure>
+            <property name="name">__isdisplay__Top Percentage_88_1</property>
+            <property name="value">25</property>
+        </structure>
+        <structure>
+            <property name="name">Top Percentage_88_2</property>
+            <property name="value">25</property>
+        </structure>
+        <structure>
+            <property name="name">Top Percentage_88_type_</property>
+            <property name="value">decimal</property>
+        </structure>
+        <structure>
+            <property name="name">Top Count_87_3</property>
+            <property name="value">5</property>
+        </structure>
+        <structure>
+            <property name="name">Top Count_87_type_</property>
+            <property name="value">decimal</property>
+        </structure>
+    </list-property>
+</report>

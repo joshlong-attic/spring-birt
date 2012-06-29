@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.10" id="1">
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
     <property name="author">Mark Coggins</property>
-    <property name="createdBy">Eclipse BIRT Designer Version 1.0.0 Build &lt;20050601-0809></property>
-    <property name="units">in</property>
+    <property name="createdBy">Eclipse BIRT Designer Version 3.7.2.v20120213 Build &lt;3.7.2.v20120214-1408></property>
     <text-property name="title">Top Classic Models Inc. Customers by Revenue</text-property>
+    <property name="units">in</property>
+    <property name="layoutPreference">auto layout</property>
     <list-property name="configVars">
         <structure>
             <property name="name">Top Count</property>
@@ -17,13 +18,14 @@
     <parameters>
         <scalar-parameter name="Top Count" id="87">
             <text-property name="helpText">Enter the number of customers you wish included in the top "N" graph of the report</text-property>
-            <property name="valueType">static</property>
-            <property name="dataType">decimal</property>
             <text-property name="promptText">Number of Customers for Top "N" Chart</text-property>
-            <property name="allowBlank">false</property>
-            <property name="allowNull">false</property>
+            <property name="valueType">static</property>
+            <property name="isRequired">true</property>
+            <property name="dataType">decimal</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant">5</value>
+            </simple-property-list>
             <property name="controlType">text-box</property>
-            <property name="defaultValue">5</property>
             <structure name="format">
                 <property name="category">Unformatted</property>
                 <property name="pattern">Unformatted</property>
@@ -31,12 +33,14 @@
         </scalar-parameter>
         <scalar-parameter name="Top Percentage" id="88">
             <text-property name="helpText">Enter the percentage of customers you wish included in the top N% listing of the report</text-property>
-            <property name="valueType">static</property>
-            <property name="dataType">decimal</property>
             <text-property name="promptText">Percentage of Customers for Top N% Listing</text-property>
-            <property name="allowBlank">false</property>
+            <property name="valueType">static</property>
+            <property name="isRequired">true</property>
+            <property name="dataType">decimal</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant">25</value>
+            </simple-property-list>
             <property name="controlType">text-box</property>
-            <property name="defaultValue">25</property>
             <structure name="format">
                 <property name="category">Unformatted</property>
                 <property name="pattern">Unformatted</property>
@@ -45,9 +49,26 @@
     </parameters>
     <data-sources>
         <oda-data-source extensionID="org.eclipse.birt.report.data.oda.jdbc" name="Classic Models" id="59">
-            <property name="odaDriverClass">org.eclipse.birt.report.data.oda.sampledb.Driver</property>
-            <property name="odaURL">jdbc:classicmodels:sampledb</property>
-            <property name="odaUser">ClassicModels</property>
+            <list-property name="privateDriverProperties">
+                <ex-property>
+                    <name>metadataBidiFormatStr</name>
+                    <value>ILYNN</value>
+                </ex-property>
+                <ex-property>
+                    <name>disabledMetadataBidiFormatStr</name>
+                </ex-property>
+                <ex-property>
+                    <name>contentBidiFormatStr</name>
+                    <value>ILYNN</value>
+                </ex-property>
+                <ex-property>
+                    <name>disabledContentBidiFormatStr</name>
+                </ex-property>
+            </list-property>
+            <property name="odaDriverClass">com.mysql.jdbc.Driver</property>
+            <property name="odaURL">jdbc:mysql://localhost/classicmodels</property>
+            <property name="odaUser">root</property>
+            <encrypted-property name="odaPassword" encryptionID="base64">cm9vdA==</encrypted-property>
         </oda-data-source>
     </data-sources>
     <data-sets>
@@ -92,7 +113,7 @@
                     <property name="dataType">float</property>
                 </structure>
             </list-property>
-            <property name="queryText">select CUSTOMERS.CUSTOMERNAME,
+            <xml-property name="queryText"><![CDATA[select CUSTOMERS.CUSTOMERNAME,
        CUSTOMERS.CUSTOMERNUMBER,
        sum(ORDERDETAILS.QUANTITYORDERED *
        ORDERDETAILS.PRICEEACH) as CUSTOMERTOTAL
@@ -100,7 +121,7 @@ from CUSTOMERS, ORDERS, ORDERDETAILS
 where CUSTOMERS.CUSTOMERNUMBER = ORDERS.CUSTOMERNUMBER
 and ORDERS.ORDERNUMBER = ORDERDETAILS.ORDERNUMBER
 group by CUSTOMERS.CUSTOMERNAME, CUSTOMERS.CUSTOMERNUMBER
-order by CUSTOMERTOTAL</property>
+order by CUSTOMERTOTAL]]></xml-property>
         </oda-data-set>
     </data-sets>
     <styles>
@@ -116,6 +137,10 @@ order by CUSTOMERTOTAL</property>
     </styles>
     <page-setup>
         <simple-master-page name="Simple MasterPage" id="8">
+            <property name="topMargin">1in</property>
+            <property name="leftMargin">1.25in</property>
+            <property name="bottomMargin">1in</property>
+            <property name="rightMargin">1.25in</property>
             <page-footer>
                 <grid id="141">
                     <property name="width">100%</property>
@@ -547,6 +572,37 @@ order by CUSTOMERTOTAL</property>
     <Enable>true</Enable>
     <LegendBehavior>None</LegendBehavior>
   </Interactivity>
+  <EmptyMessage>
+    <Caption>
+      <Value></Value>
+      <Font>
+        <Alignment/>
+      </Font>
+    </Caption>
+    <Background xsi:type="attribute:ColorDefinition">
+      <Transparency>0</Transparency>
+      <Red>255</Red>
+      <Green>255</Green>
+      <Blue>255</Blue>
+    </Background>
+    <Outline>
+      <Style>Solid</Style>
+      <Thickness>1</Thickness>
+      <Color>
+        <Transparency>255</Transparency>
+        <Red>0</Red>
+        <Green>0</Green>
+        <Blue>0</Blue>
+      </Color>
+    </Outline>
+    <Insets>
+      <Top>0.0</Top>
+      <Left>2.0</Left>
+      <Bottom>0.0</Bottom>
+      <Right>3.0</Right>
+    </Insets>
+    <Visible>false</Visible>
+  </EmptyMessage>
   <Axes>
     <Type>Text</Type>
     <Title>
@@ -715,7 +771,7 @@ order by CUSTOMERTOTAL</property>
         </Series>
         <Grouping>
           <Enabled>false</Enabled>
-          <GroupingInterval>2</GroupingInterval>
+          <GroupingInterval>2.0</GroupingInterval>
           <GroupType>Text</GroupType>
           <AggregateExpression>Sum</AggregateExpression>
         </Grouping>
@@ -965,7 +1021,7 @@ order by CUSTOMERTOTAL</property>
         </Series>
         <Grouping>
           <Enabled>false</Enabled>
-          <GroupingInterval>2</GroupingInterval>
+          <GroupingInterval>2.0</GroupingInterval>
           <GroupType>Text</GroupType>
           <AggregateExpression>Sum</AggregateExpression>
         </Grouping>
@@ -1195,7 +1251,7 @@ order by CUSTOMERTOTAL</property>
       </Series>
       <Grouping>
         <Enabled>false</Enabled>
-        <GroupingInterval>2</GroupingInterval>
+        <GroupingInterval>2.0</GroupingInterval>
         <GroupType>Text</GroupType>
         <AggregateExpression>Sum</AggregateExpression>
       </Grouping>
@@ -1324,7 +1380,9 @@ order by CUSTOMERTOTAL</property>
                             <structure>
                                 <property name="operator">top-n</property>
                                 <expression name="expr">row["CUSTOMERTOTAL"]</expression>
-                                <expression name="value1">params["Top Count"]</expression>
+                                <simple-property-list name="value1">
+                                    <value>params["Top Count"]</value>
+                                </simple-property-list>
                             </structure>
                         </list-property>
                         <property name="dataSet">Customer Sales</property>
@@ -1391,6 +1449,7 @@ order by CUSTOMERTOTAL</property>
                                 <expression name="expression">dataSetRow["CUSTOMERNUMBER"]</expression>
                             </structure>
                         </list-property>
+                        <property name="pageBreakInterval">50</property>
                         <list-property name="sort">
                             <structure>
                                 <expression name="key">row["CUSTOMERNAME"]</expression>
@@ -1400,7 +1459,9 @@ order by CUSTOMERTOTAL</property>
                             <structure>
                                 <property name="operator">top-percent</property>
                                 <expression name="expr">row["CUSTOMERTOTAL"]</expression>
-                                <expression name="value1">params["Top Percentage"]</expression>
+                                <simple-property-list name="value1">
+                                    <value>params["Top Percentage"]</value>
+                                </simple-property-list>
                             </structure>
                         </list-property>
                         <column id="71">
@@ -1417,7 +1478,7 @@ order by CUSTOMERTOTAL</property>
                                 <property name="style">BackgroundYellow</property>
                                 <cell id="63">
                                     <label id="74">
-                                        <property name="fontFamily">SansSerif</property>
+                                        <property name="fontFamily">"SansSerif"</property>
                                         <property name="fontWeight">bold</property>
                                         <property name="paddingLeft">0pt</property>
                                         <text-property name="text">Customer Name</text-property>
@@ -1425,7 +1486,7 @@ order by CUSTOMERTOTAL</property>
                                 </cell>
                                 <cell id="155">
                                     <label id="158">
-                                        <property name="fontFamily">SansSerif</property>
+                                        <property name="fontFamily">"SansSerif"</property>
                                         <property name="fontWeight">bold</property>
                                         <property name="paddingLeft">0pt</property>
                                         <property name="textAlign">right</property>
@@ -1434,7 +1495,7 @@ order by CUSTOMERTOTAL</property>
                                 </cell>
                                 <cell id="64">
                                     <label id="76">
-                                        <property name="fontFamily">SansSerif</property>
+                                        <property name="fontFamily">"SansSerif"</property>
                                         <property name="fontWeight">bold</property>
                                         <property name="paddingRight">0pt</property>
                                         <property name="textAlign">right</property>

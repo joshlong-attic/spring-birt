@@ -1,5 +1,8 @@
 package org.eclipse.birt.spring.example;
 
+import java.io.File;
+import java.util.logging.Level;
+
 import org.eclipse.birt.spring.core.BirtEngineFactory;
 import org.eclipse.birt.spring.core.BirtView;
 import org.springframework.context.annotation.Bean;
@@ -34,7 +37,9 @@ public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public BirtView birtView() {
         BirtView view = new BirtView();
+        
         view.setBirtEngine(this.engine().getObject());
+        
         return view;
     }
 
