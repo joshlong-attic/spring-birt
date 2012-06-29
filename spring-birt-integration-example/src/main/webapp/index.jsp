@@ -5,10 +5,10 @@
 <body>
 
 <c:url value="/images/fez-diagram.jpg" var="fez"/>
-<c:url value="/reports?reportName=TopNPercent.rptdesign" var="topNPercent"/>
-<c:url value="/reports?reportName=SampleSpring.rptdesign" var="sampleSpring"/>
-<c:url value="/reports?reportName=masterreport.rptdesign" var="master"/>
-<c:url value="/reports?reportName=DashBoard.rptdesign" var="dashboard"/>
+<c:url value="/TopNPercent" var="topNPercent"/>
+<c:url value="/SampleSpring" var="sampleSpring"/>
+<c:url value="/masterreport" var="master"/>
+<c:url value="/DashBoard" var="dashboard"/>
 
 <img alt = "Some data is obvious..." src="${fez}"/>
 <br/>

@@ -1,17 +1,15 @@
 package org.eclipse.birt.spring.core;
 
 import org.apache.commons.io.IOUtils;
-
-
 import org.eclipse.birt.report.data.oda.jdbc.IConnectionFactory;
 import org.eclipse.birt.report.engine.api.*;
 import org.eclipse.birt.report.model.api.IModuleOption;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-import org.springframework.web.servlet.view.AbstractView;
-import javax.servlet.ServletContext;
+import org.springframework.web.servlet.view.AbstractUrlBasedView;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
@@ -20,9 +18,8 @@ import java.util.*;
 
 /**
  * Base class for BIRT-based {@link org.springframework.web.servlet.View views}.
- *
  */
-abstract public class AbstractSingleFormatBirtView extends AbstractView implements InitializingBean {
+abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView implements InitializingBean {
 
     public static interface BirtViewResourcePathCallback {
 
@@ -46,7 +43,7 @@ abstract public class AbstractSingleFormatBirtView extends AbstractView implemen
 
     private String imagesDirectory = "images";
 
-    private String reportsDirectory = "reports";
+    private String reportsDirectory = "";
 
     private String resourceDirectory = "resources";
 
@@ -134,29 +131,27 @@ abstract public class AbstractSingleFormatBirtView extends AbstractView implemen
         }
 
         public String baseUrl(ServletContext sc, HttpServletRequest request, String reportName) throws Throwable {
-            return request.getRequestURI();
+            String baseUrl = request.getRequestURI();
+            return baseUrl;
         }
 
         public String pathForReport(ServletContext sc, HttpServletRequest request, String reportName) throws Throwable {
-            return sc.getRealPath("/" + reportFolder) + "/" + reportName;
+            return sc.getRealPath(reportFolder) + reportName;
         }
 
         public String imageDirectory(ServletContext sc, HttpServletRequest request, String reportName) {
-            return sc.getRealPath("/" + imagesFolder);
+            return sc.getRealPath(imagesFolder);
         }
 
         public String resourceDirectory(ServletContext sc, HttpServletRequest request, String reportName) {
-            return sc.getRealPath("/" + resourceFolder);
+            return sc.getRealPath(resourceFolder);
         }
 
         public SimpleBirtViewResourcePathPathCallback(String f, String i, String k) {
-            this.reportFolder = f;
-            this.imagesFolder = i;
-            this.resourceFolder = k;
-            Assert.hasText(this.reportFolder, "you must provide a valid report folder value");
-            Assert.hasText(this.imagesFolder, "you must provide a valid images folder value");
-            Assert.hasText(this.resourceFolder, "you must provide a valid resource folder value");
-        }
+            this.reportFolder = StringUtils.hasText(f) ? f : "";
+            this.imagesFolder = StringUtils.hasText(i) ? i : "";
+            this.resourceFolder = StringUtils.hasText(k) ? k : "";
+         }
 
     }
 
@@ -178,7 +173,10 @@ abstract public class AbstractSingleFormatBirtView extends AbstractView implemen
     protected void renderMergedOutputModel(Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
         FileInputStream fis = null;
         try {
-            String reportName = request.getParameter(this.reportNameRequestParameter);
+
+            String requestReportNameParameter = request.getParameter(this.reportNameRequestParameter);
+            String reportName = StringUtils.hasText(requestReportNameParameter) ?
+                    requestReportNameParameter : getUrl();
             String format = request.getParameter(this.reportFormatRequestParameter);
             ServletContext sc = request.getServletContext(); /// avoid creating an HTTP session if possible.
             if (format == null) {
@@ -189,7 +187,8 @@ abstract public class AbstractSingleFormatBirtView extends AbstractView implemen
             mapOfOptions.put(IModuleOption.RESOURCE_FOLDER_KEY, birtViewResourcePathCallback.resourceDirectory(sc, request, reportName));
             mapOfOptions.put(IModuleOption.PARSER_SEMANTIC_CHECK_KEY, Boolean.FALSE);
 
-            fis = new FileInputStream(birtViewResourcePathCallback.pathForReport(sc, request, reportName));
+            String pathForReport = birtViewResourcePathCallback.pathForReport(sc, request, reportName);
+            fis = new FileInputStream(pathForReport);
             IReportRunnable runnable = birtEngine.openReportDesign(reportName, fis, mapOfOptions);
             IRunAndRenderTask runAndRenderTask = birtEngine.createRunAndRenderTask(runnable);
             runAndRenderTask.setParameterValues(discoverAndSetParameters(runnable, request));
