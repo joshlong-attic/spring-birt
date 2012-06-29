@@ -115,7 +115,7 @@ public class ReportParameterConverter {
      * @param reportParameterObj report parameter value object.
      * @return parameter value in string.
      */
-    public String format(Object reportParameterObj) {
+    private String format(Object reportParameterObj) {
         String reportParameterValue = null;
 
         if (reportParameterObj != null && uLocale != null) {
@@ -337,7 +337,7 @@ public class ReportParameterConverter {
      * @param reportParameterValue input string to parse
      * @return an object
      */
-    protected Object parseDateTime(String reportParameterValue) {
+    private Object parseDateTime(String reportParameterValue) {
         DateFormatter df = getDateFormatter();
         if (df == null) {
             return null;
