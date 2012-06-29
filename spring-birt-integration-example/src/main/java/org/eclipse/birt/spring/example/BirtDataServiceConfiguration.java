@@ -2,6 +2,7 @@ package org.eclipse.birt.spring.example;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
@@ -20,6 +21,7 @@ import java.sql.Driver;
  */
 @EnableTransactionManagement
 @Configuration
+@PropertySource("/config.properties")
 public class BirtDataServiceConfiguration {
     @Bean
     public PlatformTransactionManager transactionManager() throws Exception {

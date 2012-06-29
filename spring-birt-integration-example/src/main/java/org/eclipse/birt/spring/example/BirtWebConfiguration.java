@@ -2,9 +2,11 @@ package org.eclipse.birt.spring.example;
 
 import org.eclipse.birt.spring.core.BirtEngineFactory;
 import org.eclipse.birt.spring.core.BirtView;
+import org.eclipse.birt.spring.core.BirtViewResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -38,8 +40,10 @@ public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public BeanNameViewResolver beanNameResolver() {
+    public ViewResolver beanNameResolver() {
         return new BeanNameViewResolver();
+        //BirtViewResolver birtViewResolver = new BirtViewResolver();
+//        return birtViewResolver ;
     }
 
     @Bean

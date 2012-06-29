@@ -24,22 +24,29 @@ import java.util.*;
 abstract public class AbstractSingleFormatBirtView extends AbstractView implements InitializingBean {
 
     private IReportEngine birtEngine;
+
     private String reportNameRequestParameter = "reportName";
+
     private String imagesDirectory = "images";
+
     private String reportsDirectory = "reports";
+
     private String resourceDirectory = "resources";
+
     private String isNullParameterName = "__isnull";
+
+    private IRenderOption renderOption;
+
     private String reportFormatRequestParameter = "reportFormat";
+
     protected BirtViewResourcePathCallback birtViewResourcePathCallback;
+
     protected IHTMLActionHandler actionHandler;
+
     private String requestEncoding = "UTF-8";
 
     public void setNullParameterName(String nullParameterName) {
         isNullParameterName = nullParameterName;
-    }
-
-    protected boolean useWriter(){
-        return false;// by default well render using the Response' outputstream
     }
 
     public void setBirtViewResourcePathCallback(BirtViewResourcePathCallback birtViewResourcePathCallback) {
@@ -94,9 +101,6 @@ abstract public class AbstractSingleFormatBirtView extends AbstractView implemen
         this.imagesDirectory = imagesDirectory;
     }
 
-    /**
-     * Marker interface used to provide callback hooks for certain resolution chores.
-     */
     public static interface BirtViewResourcePathCallback {
 
         String baseImageUrl(ServletContext sc, HttpServletRequest r, String reportName) throws Throwable;
@@ -146,6 +150,7 @@ abstract public class AbstractSingleFormatBirtView extends AbstractView implemen
 
     }
 
+
     public void setHtmlActionHandler(IHTMLActionHandler actionHandler) {
         this.actionHandler = actionHandler;
     }
@@ -155,12 +160,9 @@ abstract public class AbstractSingleFormatBirtView extends AbstractView implemen
                                                  BirtViewResourcePathCallback resourcePathCallback, Map<String, Object> appContextValuesMap,
                                                  String reportName, String format, IRenderOption options) throws Throwable;
 
-
     public void setRenderOption(IRenderOption renderOption) {
         this.renderOption = renderOption;
     }
-
-    private IRenderOption renderOption;
 
     @SuppressWarnings("unchecked")
     protected void renderMergedOutputModel(Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -186,7 +188,6 @@ abstract public class AbstractSingleFormatBirtView extends AbstractView implemen
             String contentType = birtEngine.getMIMEType(format);
             response.setContentType(contentType);
             setContentType(contentType);
-
 
             Map<String, Object> appContextValuesToPutInApplicationContextDuringRunAndRender = new HashMap<String, Object>();
             appContextValuesToPutInApplicationContextDuringRunAndRender.put(EngineConstants.APPCONTEXT_BIRT_VIEWER_HTTPSERVET_REQUEST, request);
@@ -246,7 +247,7 @@ abstract public class AbstractSingleFormatBirtView extends AbstractView implemen
         } catch (Throwable th) {
             throw new RuntimeException(th); // nothing useful to do here
         } finally {
-            if (null != fis) // todo who closes the InputStream?
+            if (null != fis)
                 IOUtils.closeQuietly(fis);
         }
     }
