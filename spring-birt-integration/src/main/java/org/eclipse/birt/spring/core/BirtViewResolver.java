@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 
 /**
  * Simple {@link org.springframework.web.servlet.ViewResolver} that translates the URL of the report into a report name
- * and then resolves it using the appropriate {@link BirtView Birt view implementation}.
+ * and then resolves it using the appropriate {@link AbstractSingleFormatBirtView Birt view implementation}.
  *
  * @author Josh Long
  * @author Jason Weathersby

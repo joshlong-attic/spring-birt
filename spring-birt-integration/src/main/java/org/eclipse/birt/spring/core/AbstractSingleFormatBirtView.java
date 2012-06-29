@@ -88,7 +88,7 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
             this.renderOption = new RenderOption();
 
         if (null == this.actionHandler)
-            this.actionHandler = new SpringActionHandler(this.reportNameRequestParameter, this.reportFormatRequestParameter);
+            this.actionHandler = new SimpleRequestParameterActionHandler(this.reportNameRequestParameter, this.reportFormatRequestParameter);
 
         if (null == birtViewResourcePathCallback)
             this.birtViewResourcePathCallback = new SimpleBirtViewResourcePathPathCallback(this.reportsDirectory, this.imagesDirectory, this.resourceDirectory);
@@ -133,8 +133,7 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
         public String baseUrl(ServletContext sc, HttpServletRequest request, String reportName) throws Throwable {
             String baseUrl = request.getRequestURI();
             int trimloc = baseUrl.lastIndexOf("/", baseUrl.length()-2);
-            String newBaseUrl = baseUrl.substring(0, trimloc);
-            return newBaseUrl;
+            return baseUrl.substring(0, trimloc);
         }
 
         public String pathForReport(ServletContext sc, HttpServletRequest request, String reportName) throws Throwable {

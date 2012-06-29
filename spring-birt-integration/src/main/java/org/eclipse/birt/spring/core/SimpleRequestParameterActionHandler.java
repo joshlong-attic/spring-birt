@@ -11,27 +11,44 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Defines a default action handler for HTML output format
+ *
+ * @author Jason Weathersby
+ * @author Josh Long
  */
-public class SpringActionHandler implements IHTMLActionHandler {
+public class SimpleRequestParameterActionHandler implements IHTMLActionHandler {
     private String mReportsKey = null;
     private String mFormatKey = null;
+    private Map<Integer, ActionUrlBuilder> urlBuilderMap = new ConcurrentHashMap<Integer, ActionUrlBuilder>();
 
-
-    public SpringActionHandler(String reportNameKey, String formatKey) {
+    public SimpleRequestParameterActionHandler(String reportNameKey, String formatKey) {
         this.mReportsKey = reportNameKey;
         this.mFormatKey = formatKey;
-    }
 
-    /**
-     * Get URL of the action.
-     *
-     * @param actionDefn
-     * @param context
-     * @return URL
-     */
+        // lookup table for types of actions
+        urlBuilderMap.put(IAction.ACTION_BOOKMARK, new ActionUrlBuilder() {
+            public String urlForAction(int actionType, IAction actionDefn, IReportContext ctx) throws Exception {
+                if (actionDefn.getActionString() != null)
+                    return "#" + actionDefn.getActionString();
+                return null;
+            }
+        });
+        urlBuilderMap.put(IAction.ACTION_HYPERLINK, new ActionUrlBuilder() {
+            public String urlForAction(int actionType, IAction actionDefn, IReportContext ctx) throws Exception {
+                return actionDefn.getActionString();
+            }
+        });
+        urlBuilderMap.put(IAction.ACTION_DRILLTHROUGH, new ActionUrlBuilder() {
+            public String urlForAction(int actionType, IAction actionDefn, IReportContext ctx) throws Exception {
+                return buildDrillAction(actionDefn, ctx);
+            }
+        });
+
+
+    }
 
     public String getURL(IAction actionDefn, Object context) {
         if (context instanceof IReportContext) {
@@ -41,33 +58,18 @@ public class SpringActionHandler implements IHTMLActionHandler {
         }
     }
 
-    /*
-      * (non-Javadoc)
-      *
-      * @see org.eclipse.birt.report.engine.api2.IHTMLActionHandler#getURL(org.eclipse.birt.report.engine.api2.IAction,
-      *      java.lang.Object)
-      */
     public String getURL(IAction actionDefn, IReportContext context) {
-        if (actionDefn == null) {
-            return null;
+        try {
+            return (actionDefn != null && urlBuilderMap.containsKey(actionDefn.getType())) ?
+                    urlBuilderMap.get(actionDefn.getType()).urlForAction(actionDefn.getType(), actionDefn, context) :
+                    null;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        String url = null;
-        switch (actionDefn.getType()) {
-            case IAction.ACTION_BOOKMARK:
-                if (actionDefn.getActionString() != null) {
-                    url = "#" + actionDefn.getActionString();
-                }
-                break;
-            case IAction.ACTION_HYPERLINK:
-                url = actionDefn.getActionString();
-                break;
-            case IAction.ACTION_DRILLTHROUGH:
-                url = buildDrillAction(actionDefn, context);
-                break;
-            default:
-                return null;
-        }
-        return url;
+    }
+
+    static private interface ActionUrlBuilder {
+        String urlForAction(int actionType, IAction actionDefn, IReportContext ctx) throws Exception;
     }
 
     /**
@@ -80,17 +82,13 @@ public class SpringActionHandler implements IHTMLActionHandler {
     protected String buildDrillAction(IAction action, IReportContext context) {
         String baseURL = null;
         if (context != null) {
-            if (context instanceof IReportContext) {
-                baseURL = ((IReportContext) context).getRenderOption().getBaseURL();
-            } else {
-                baseURL = "";
-            }
+            baseURL = context.getRenderOption().getBaseURL();
         }
 
         if (baseURL == null) {
             baseURL = "";
         }
-        StringBuffer link = new StringBuffer();
+        StringBuilder link = new StringBuilder();
         String reportName = action.getReportName();
 
 
@@ -111,8 +109,8 @@ public class SpringActionHandler implements IHTMLActionHandler {
             // add format support
             boolean quesChar = false;
             if (format != null && format.length() > 0) {
-                link.append("?" + this.mFormatKey + "=" + format); 
-                quesChar =true;
+                link.append("?").append(this.mFormatKey).append("=").append(format);
+                quesChar = true;
             }
 
             // Adds the parameters
@@ -134,12 +132,12 @@ public class SpringActionHandler implements IHTMLActionHandler {
                             for (Object value1 : values) {
                                 String value = getDisplayValue(value1);
                                 if (value != null) {
-                                	if( quesChar){
-                                		link.append("&").append(URLEncoder.encode(key, "UTF-8")).append("=").append(URLEncoder.encode(value, "UTF-8"));
-                                	}else{
+                                    if (quesChar) {
+                                        link.append("&").append(URLEncoder.encode(key, "UTF-8")).append("=").append(URLEncoder.encode(value, "UTF-8"));
+                                    } else {
                                         link.append("?").append(URLEncoder.encode(key, "UTF-8")).append("=").append(URLEncoder.encode(value, "UTF-8"));
-                                        quesChar=true;
-                                	}
+                                        quesChar = true;
+                                    }
                                 }
                             }
                         }
@@ -151,11 +149,11 @@ public class SpringActionHandler implements IHTMLActionHandler {
 
             if (action.getBookmark() != null) {
                 try {
-                    link.append("#"); //$NON-NLS-1$
-                    link.append(URLEncoder.encode(action.getBookmark(),
-                            "UTF-8")); //$NON-NLS-1$
+                    link.append("#");
+                    link.append(URLEncoder.encode(action.getBookmark(), "UTF-8"));
+
                 } catch (UnsupportedEncodingException e) {
-                    // Does nothing
+                    throw new RuntimeException(e);
                 }
             }
         }
