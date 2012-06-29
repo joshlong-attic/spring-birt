@@ -1,7 +1,7 @@
 package org.eclipse.birt.spring.example;
 
 import org.eclipse.birt.spring.core.BirtEngineFactory;
-import org.eclipse.birt.spring.core.BirtView;
+import org.eclipse.birt.spring.core.HtmlSingleFormatBirtView;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +12,8 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.BeanNameViewResolver;
 
+import javax.inject.Inject;
+
 /**
  * @author Jason Weathersby
  * @author Josh Long
@@ -21,9 +23,14 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 @Configuration
 public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
 
+    static private final String HTML_BIRT = "html", PDF_BIRT = "pdf";
+
+    @Inject
+    BirtDataServiceConfiguration birtDataServiceConfiguration;
+
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/reports").setViewName("birtView");
+        registry.addViewController("/reports").setViewName(HTML_BIRT);
     }
 
     @Override
@@ -31,12 +38,26 @@ public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("images/*").addResourceLocations("/images/");
     }
 
-    @Bean
-    public BirtView birtView() {
-        BirtView view = new BirtView();
-        view.setBirtEngine(this.engine().getObject());
-        return view;
+
+    @Bean(name = HTML_BIRT)
+    public HtmlSingleFormatBirtView htmlBirt() throws Exception {
+
+        HtmlSingleFormatBirtView htmlSingleFormatBirtView = new HtmlSingleFormatBirtView();
+        htmlSingleFormatBirtView.setBirtEngine(this.engine().getObject());
+        htmlSingleFormatBirtView.setDataSource(birtDataServiceConfiguration.dataSource());
+
+        return htmlSingleFormatBirtView;
     }
+
+/*
+@Bean
+public BirtView birtView() {
+    BirtView view = new BirtView();
+    view.setBirtEngine(this.engine().getObject());
+    return view;
+}*/
+
+    // this simply looks up other reports by their bean name
 
     @Bean
     public ViewResolver beanNameResolver() {

@@ -18,12 +18,13 @@ import java.util.Map;
  */
 public class PdfSingleFormatBirtView extends AbstractSingleFormatBirtView {
 
-    public PdfSingleFormatBirtView(){
+    public PdfSingleFormatBirtView() {
         setContentType("application/pdf");
     }
 
     @Override
-    protected RenderOption renderReport(Map map, HttpServletRequest request, HttpServletResponse response, BirtViewResourcePathCallback resourcePathCallback, Map<String, Object> appContextValuesMap, String reportName, String format, IRenderOption options) throws Throwable {
+    protected RenderOption renderReport(Map<String, Object> map, HttpServletRequest request, HttpServletResponse response, BirtViewResourcePathCallback resourcePathCallback, Map<String, Object> appContextValuesMap, String reportName, String format, IRenderOption options) throws Throwable {
+
         PDFRenderOption pdfOptions = new PDFRenderOption(options);
         pdfOptions.setOutputFormat("pdf");
         pdfOptions.setOption(IPDFRenderOption.PAGE_OVERFLOW, IPDFRenderOption.FIT_TO_PAGE_SIZE);

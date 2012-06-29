@@ -23,12 +23,14 @@ import java.sql.Driver;
 @Configuration
 @PropertySource("/config.properties")
 public class BirtDataServiceConfiguration {
+
+    @Inject
+    private Environment environment ;
+
     @Bean
     public PlatformTransactionManager transactionManager() throws Exception {
         return new DataSourceTransactionManager(this.dataSource());
     }
-
-    @Inject private Environment  environment ;
 
     @Bean
     @SuppressWarnings("unchecked")

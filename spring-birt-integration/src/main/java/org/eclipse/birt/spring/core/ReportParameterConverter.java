@@ -305,7 +305,7 @@ public class ReportParameterConverter {
                         Number num = nf.parse(reportParameterValue);
 
                         if (num != null) {
-                            parameterValueObj = Integer.valueOf(num.intValue());
+                            parameterValueObj = num.intValue();
                         }
                     } catch (ParseException ex) {
                         nf.applyPattern("General Number");
@@ -314,7 +314,7 @@ public class ReportParameterConverter {
                             Number num = nf.parse(reportParameterValue);
 
                             if (num != null) {
-                                parameterValueObj = Integer.valueOf(num.intValue());
+                                parameterValueObj = num.intValue();
                             }
                         } catch (ParseException pex) {
                             try {

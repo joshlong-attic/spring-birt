@@ -167,7 +167,7 @@ abstract public class AbstractSingleFormatBirtView extends AbstractView implemen
     }
 
 
-    abstract protected RenderOption renderReport(Map map, HttpServletRequest request, HttpServletResponse response,
+    abstract protected RenderOption renderReport(Map<String, Object> map, HttpServletRequest request, HttpServletResponse response,
                                                  BirtViewResourcePathCallback resourcePathCallback, Map<String, Object> appContextValuesMap,
                                                  String reportName, String format, IRenderOption options) throws Throwable;
 
@@ -203,11 +203,12 @@ abstract public class AbstractSingleFormatBirtView extends AbstractView implemen
             Map<String, Object> appContextMap = new HashMap<String, Object>();
             appContextMap.put(EngineConstants.APPCONTEXT_BIRT_VIEWER_HTTPSERVET_REQUEST, request);
 
-            if (this.dataSource != null)
-                appContextMap.put(IConnectionFactory.PASS_IN_CONNECTION, this.dataSource);
+            if (this.dataSource != null) {
+                appContextMap.put(IConnectionFactory.PASS_IN_CONNECTION, this.dataSource.getConnection());
 
-            if(this.closeDataSourceConnection )
-                appContextMap.put(IConnectionFactory.CLOSE_PASS_IN_CONNECTION, Boolean.TRUE);
+                if (this.closeDataSourceConnection)
+                    appContextMap.put(IConnectionFactory.CLOSE_PASS_IN_CONNECTION, Boolean.TRUE);
+            }
 
             IRenderOption options = null == this.renderOption ? new RenderOption() : this.renderOption;
             options.setActionHandler(actionHandler);
@@ -274,8 +275,9 @@ abstract public class AbstractSingleFormatBirtView extends AbstractView implemen
         }
     }
 
-    private boolean  closeDataSourceConnection = true ;// IConnectionFactory.CLOSE_PASS_IN_CONNECTION
-    public void setCloseDataSourceConnection(boolean b ){
+    private boolean closeDataSourceConnection = true;// IConnectionFactory.CLOSE_PASS_IN_CONNECTION
+
+    public void setCloseDataSourceConnection(boolean b) {
         this.closeDataSourceConnection = b;
     }
 
