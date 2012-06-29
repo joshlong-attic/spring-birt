@@ -4,7 +4,6 @@
     <property name="units">in</property>
     <property name="iconFile">/templates/blank_report.gif</property>
     <property name="bidiLayoutOrientation">ltr</property>
-    <property name="imageDPI">150</property>
     <list-property name="libraries">
         <structure>
             <property name="fileName">Birt.rptlibrary</property>
@@ -1425,49 +1424,49 @@ GROUP BY CLASSICMODELS.PRODUCTS.PRODUCTLINE
         </grid>
         <grid name="HistoricGrid" id="347" extends="Birt.HistoricGrid">
             <overridden-values>
-                <ref-entry baseId="4" id="463"/>
-                <ref-entry baseId="5" id="464"/>
-                <ref-entry baseId="6" id="465"/>
-                <ref-entry baseId="7" id="466"/>
-                <ref-entry baseId="8" id="467"/>
-                <ref-entry baseId="9" id="468"/>
-                <ref-entry baseId="10" id="469"/>
-                <ref-entry baseId="11" id="470"/>
-                <ref-entry baseId="12" id="471"/>
-                <ref-entry baseId="13" id="472"/>
+                <ref-entry baseId="4" id="348"/>
+                <ref-entry baseId="5" id="349"/>
+                <ref-entry baseId="6" id="350"/>
+                <ref-entry baseId="7" id="351"/>
+                <ref-entry baseId="8" id="352"/>
+                <ref-entry baseId="9" id="353"/>
+                <ref-entry baseId="10" id="354"/>
+                <ref-entry baseId="11" id="355"/>
+                <ref-entry baseId="12" id="356"/>
+                <ref-entry baseId="13" id="357"/>
                 <ref-entry baseId="14" id="14"/>
-                <ref-entry baseId="15" id="473"/>
-                <ref-entry baseId="16" id="474"/>
-                <ref-entry baseId="17" id="475"/>
-                <ref-entry baseId="18" id="476"/>
-                <ref-entry baseId="19" id="477"/>
-                <ref-entry baseId="20" id="478"/>
-                <ref-entry baseId="21" id="479"/>
-                <ref-entry baseId="22" id="480"/>
-                <ref-entry baseId="23" id="481"/>
-                <ref-entry baseId="24" id="482"/>
-                <ref-entry baseId="25" id="483"/>
-                <ref-entry baseId="26" id="484"/>
-                <ref-entry baseId="27" id="485"/>
-                <ref-entry baseId="28" id="486"/>
-                <ref-entry baseId="29" id="487"/>
-                <ref-entry baseId="30" id="488"/>
-                <ref-entry baseId="31" id="489"/>
-                <ref-entry baseId="32" id="490"/>
-                <ref-entry baseId="33" id="491"/>
-                <ref-entry baseId="34" id="492"/>
-                <ref-entry baseId="35" id="493"/>
-                <ref-entry baseId="36" id="494"/>
-                <ref-entry baseId="37" id="495"/>
-                <ref-entry baseId="38" id="496"/>
-                <ref-entry baseId="39" id="497"/>
-                <ref-entry baseId="40" id="498"/>
-                <ref-entry baseId="41" id="499"/>
-                <ref-entry baseId="42" id="500"/>
-                <ref-entry baseId="43" id="501"/>
-                <ref-entry baseId="44" id="502"/>
-                <ref-entry baseId="45" id="503"/>
-                <ref-entry baseId="46" name="Company3dBar" id="504"/>
+                <ref-entry baseId="15" id="358"/>
+                <ref-entry baseId="16" id="359"/>
+                <ref-entry baseId="17" id="360"/>
+                <ref-entry baseId="18" id="361"/>
+                <ref-entry baseId="19" id="362"/>
+                <ref-entry baseId="20" id="363"/>
+                <ref-entry baseId="21" id="364"/>
+                <ref-entry baseId="22" id="365"/>
+                <ref-entry baseId="23" id="366"/>
+                <ref-entry baseId="24" id="367"/>
+                <ref-entry baseId="25" id="368"/>
+                <ref-entry baseId="26" id="369"/>
+                <ref-entry baseId="27" id="370"/>
+                <ref-entry baseId="28" id="371"/>
+                <ref-entry baseId="29" id="372"/>
+                <ref-entry baseId="30" id="373"/>
+                <ref-entry baseId="31" id="374"/>
+                <ref-entry baseId="32" id="375"/>
+                <ref-entry baseId="33" id="376"/>
+                <ref-entry baseId="34" id="377"/>
+                <ref-entry baseId="35" id="378"/>
+                <ref-entry baseId="36" id="379"/>
+                <ref-entry baseId="37" id="380"/>
+                <ref-entry baseId="38" id="381"/>
+                <ref-entry baseId="39" id="382"/>
+                <ref-entry baseId="40" id="383"/>
+                <ref-entry baseId="41" id="384"/>
+                <ref-entry baseId="42" id="385"/>
+                <ref-entry baseId="43" id="386"/>
+                <ref-entry baseId="44" id="387"/>
+                <ref-entry baseId="45" id="388"/>
+                <ref-entry baseId="46" name="Company3dBar" id="389"/>
             </overridden-values>
         </grid>
     </body>
