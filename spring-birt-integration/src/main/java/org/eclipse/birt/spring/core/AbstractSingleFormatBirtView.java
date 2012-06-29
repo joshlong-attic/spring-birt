@@ -1,6 +1,7 @@
 package org.eclipse.birt.spring.core;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.birt.report.data.oda.jdbc.IConnectionFactory;
 import org.eclipse.birt.report.engine.api.*;
 import org.eclipse.birt.report.model.api.IModuleOption;
 import org.springframework.beans.factory.InitializingBean;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.view.AbstractView;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 import java.io.FileInputStream;
 import java.util.*;
 
@@ -22,6 +24,8 @@ import java.util.*;
  * @author Josh Long
  */
 abstract public class AbstractSingleFormatBirtView extends AbstractView implements InitializingBean {
+
+    private DataSource dataSource;
 
     private IReportEngine birtEngine;
 
@@ -51,6 +55,13 @@ abstract public class AbstractSingleFormatBirtView extends AbstractView implemen
 
     public void setBirtViewResourcePathCallback(BirtViewResourcePathCallback birtViewResourcePathCallback) {
         this.birtViewResourcePathCallback = birtViewResourcePathCallback;
+    }
+
+    /**
+     * Data source to stick in the report's app context.
+     */
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     /**
@@ -189,19 +200,25 @@ abstract public class AbstractSingleFormatBirtView extends AbstractView implemen
             response.setContentType(contentType);
             setContentType(contentType);
 
-            Map<String, Object> appContextValuesToPutInApplicationContextDuringRunAndRender = new HashMap<String, Object>();
-            appContextValuesToPutInApplicationContextDuringRunAndRender.put(EngineConstants.APPCONTEXT_BIRT_VIEWER_HTTPSERVET_REQUEST, request);
+            Map<String, Object> appContextMap = new HashMap<String, Object>();
+            appContextMap.put(EngineConstants.APPCONTEXT_BIRT_VIEWER_HTTPSERVET_REQUEST, request);
+
+            if (this.dataSource != null)
+                appContextMap.put(IConnectionFactory.PASS_IN_CONNECTION, this.dataSource);
+
+            if(this.closeDataSourceConnection )
+                appContextMap.put(IConnectionFactory.CLOSE_PASS_IN_CONNECTION, Boolean.TRUE);
 
             IRenderOption options = null == this.renderOption ? new RenderOption() : this.renderOption;
             options.setActionHandler(actionHandler);
 
             IRenderOption returnedRenderOptions = renderReport(map, request, response, this.birtViewResourcePathCallback,
-                    appContextValuesToPutInApplicationContextDuringRunAndRender, reportName, format, options);
+                    appContextMap, reportName, format, options);
+
+            for (String k : appContextMap.keySet())
+                runAndRenderTask.getAppContext().put(k, appContextMap.get(k));
 
             runAndRenderTask.setRenderOption(returnedRenderOptions);
-
-            for (String k : appContextValuesToPutInApplicationContextDuringRunAndRender.keySet())
-                runAndRenderTask.getAppContext().put(k, appContextValuesToPutInApplicationContextDuringRunAndRender.get(k));
 
             runAndRenderTask.run();
             runAndRenderTask.close();
@@ -247,9 +264,19 @@ abstract public class AbstractSingleFormatBirtView extends AbstractView implemen
         } catch (Throwable th) {
             throw new RuntimeException(th); // nothing useful to do here
         } finally {
+            //IConnectionFactory.PASS_IN_CONNECTION
+//             IConnectionFactory.CLOSE_PASS_IN_CONNECTION
+            // todo OdaJDBCDriverPassInConnection
+            //reportContext.getAppContext().put("OdaJDBCDriverPassInConnectionCloseAfterUse", true);
+            // todo task.getAppContext().put("OdaJDBCDriverPassInConnectionCloseAfterUse", true);
             if (null != fis)
                 IOUtils.closeQuietly(fis);
         }
+    }
+
+    private boolean  closeDataSourceConnection = true ;// IConnectionFactory.CLOSE_PASS_IN_CONNECTION
+    public void setCloseDataSourceConnection(boolean b ){
+        this.closeDataSourceConnection = b;
     }
 
     private Map<String, Object> discoverAndSetParameters(IReportRunnable report, HttpServletRequest request) throws Throwable {

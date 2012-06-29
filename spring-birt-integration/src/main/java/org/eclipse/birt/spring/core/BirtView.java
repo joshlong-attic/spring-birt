@@ -81,6 +81,8 @@ public class BirtView extends AbstractView implements InitializingBean {
         this.imagesDirectory = imagesDirectory;
     }
 
+
+
     public static interface BirtViewResourcePathCallback {
 
         String baseImageUrl(ServletContext sc, HttpServletRequest r, String reportName) throws Throwable;
@@ -189,6 +191,7 @@ public class BirtView extends AbstractView implements InitializingBean {
                 options.setOutputFormat(format);
                 runAndRenderTask.setRenderOption(options);
             }
+
             runAndRenderTask.getAppContext().put(EngineConstants.APPCONTEXT_BIRT_VIEWER_HTTPSERVET_REQUEST, request);
             //runAndRenderTask.getAppContext().put("birt.viewer.resource.path", birtViewResourcePathCallback.resourceDirectory(sc, request, reportName));
             runAndRenderTask.run();

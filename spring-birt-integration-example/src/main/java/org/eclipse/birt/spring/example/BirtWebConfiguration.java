@@ -2,7 +2,6 @@ package org.eclipse.birt.spring.example;
 
 import org.eclipse.birt.spring.core.BirtEngineFactory;
 import org.eclipse.birt.spring.core.BirtView;
-import org.eclipse.birt.spring.core.BirtViewResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
