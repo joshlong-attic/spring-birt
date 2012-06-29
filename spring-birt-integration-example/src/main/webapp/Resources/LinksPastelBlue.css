@@ -1,72 +1,72 @@
 .table-header {
     background-color: #6078BF;
-    font-family: Arial;
+    font-family: Arial,sans-serif;
     font-size: small;
     font-weight: bold;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     color: #FFFFFF;
 }
 
 .table-footer {
     background-color: #6078BF;
-    font-family: Arial;
+    font-family: Arial,sans-serif,sans-serif;
     font-size: small;
     font-weight: bold;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     color: #FFFFFF;
 }
 
 .table-detail {
     background-color: #E6ECFF;
-    font-family: Arial;
+    font-family: Arial,sans-serif;
     font-size: x-small;
     font-weight: bold;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     color: #000080;
 }
 
 .table-group-header-1 {
     background-color: #809FFF;
-    font-family: Arial;
+    font-family: Arial,sans-serif;
     font-size: small;
     font-weight: bold;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     color: #FFFFFF;
 }
 
 .table-group-footer-1 {
     background-color: #809FFF;
-    font-family: Arial;
+    font-family: Arial,sans-serif;
     font-size: small;
     font-weight: bold;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     color: #FFFFFF;
 }
 
 .special-header {
     background-color: #6078BF;
-    font-family: Arial;
+    font-family: Arial,sans-serif;
     font-size: medium;
     font-weight: bold;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     color: #FFFFFF;
 }
 
 .crosstab-detail {
     background-color: #E6ECFF;
-    font-family: Arial;
+    font-family: Arial,sans-serif;
     font-size: x-small;
     font-weight: bold;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     color: #000080;
 }
 
 .crosstab-header {
     background-color: #6078BF;
-    font-family: Arial;
+    font-family: Arial,sans-serif;
     font-size: small;
     font-weight: bold;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     color: #FFFFFF;
 }
 
