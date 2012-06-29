@@ -37,6 +37,10 @@ public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
         registry.addViewController("/SampleSpring");
         registry.addViewController("/DashBoard");
         registry.addViewController("/masterreport");
+        registry.addViewController("/detail");
+        registry.addViewController("/ProductLines");
+        
+        
 //        registry.addViewController("/reports").setViewName(BIRT_HTML_VIEW);
     }
 

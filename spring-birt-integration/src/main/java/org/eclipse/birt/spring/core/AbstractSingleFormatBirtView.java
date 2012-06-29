@@ -132,7 +132,9 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 
         public String baseUrl(ServletContext sc, HttpServletRequest request, String reportName) throws Throwable {
             String baseUrl = request.getRequestURI();
-            return baseUrl;
+            int trimloc = baseUrl.lastIndexOf("/", baseUrl.length()-2);
+            String newBaseUrl = baseUrl.substring(0, trimloc);
+            return newBaseUrl;
         }
 
         public String pathForReport(ServletContext sc, HttpServletRequest request, String reportName) throws Throwable {

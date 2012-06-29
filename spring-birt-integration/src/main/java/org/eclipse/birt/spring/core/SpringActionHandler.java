@@ -97,18 +97,22 @@ public class SpringActionHandler implements IHTMLActionHandler {
         if (reportName != null && !reportName.equals("")) {
             link.append(baseURL);
             String format = action.getFormat();
-
-
+            System.out.println(reportName);
+            String reportAction = reportName.replaceAll("(?i).rptdesign", "");
+            System.out.println(reportAction);
             try {
-                link.append("?" + this.mReportsKey + "=");
-                link.append(URLEncoder.encode(reportName, "UTF-8")); //$NON-NLS-1$
+                //link.append("?" + this.mReportsKey + "=");
+                link.append("/");
+                link.append(URLEncoder.encode(reportAction, "UTF-8"));
             } catch (UnsupportedEncodingException e1) {
                 // It should not happen. Does nothing
             }
 
             // add format support
+            boolean quesChar = false;
             if (format != null && format.length() > 0) {
-                link.append("&" + this.mFormatKey + "=" + format); //$NON-NLS-1$
+                link.append("?" + this.mFormatKey + "=" + format); 
+                quesChar =true;
             }
 
             // Adds the parameters
@@ -130,7 +134,12 @@ public class SpringActionHandler implements IHTMLActionHandler {
                             for (Object value1 : values) {
                                 String value = getDisplayValue(value1);
                                 if (value != null) {
-                                    link.append("&").append(URLEncoder.encode(key, "UTF-8")).append("=").append(URLEncoder.encode(value, "UTF-8"));
+                                	if( quesChar){
+                                		link.append("&").append(URLEncoder.encode(key, "UTF-8")).append("=").append(URLEncoder.encode(value, "UTF-8"));
+                                	}else{
+                                        link.append("?").append(URLEncoder.encode(key, "UTF-8")).append("=").append(URLEncoder.encode(value, "UTF-8"));
+                                        quesChar=true;
+                                	}
                                 }
                             }
                         }

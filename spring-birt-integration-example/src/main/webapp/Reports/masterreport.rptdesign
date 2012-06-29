@@ -25,8 +25,8 @@
             </list-property>
             <property name="odaDriverClass">com.mysql.jdbc.Driver</property>
             <property name="odaURL">jdbc:mysql://localhost/classicmodels</property>
-            <property name="odaUser">root</property>
-            <encrypted-property name="odaPassword" encryptionID="base64">cm9vdA==</encrypted-property>
+            <property name="odaUser">birt</property>
+            <encrypted-property name="odaPassword" encryptionID="base64">YmlydA==</encrypted-property>
         </oda-data-source>
     </data-sources>
     <data-sets>
@@ -572,7 +572,7 @@ from orders]]></xml-property>
                                 <structure>
                                     <property name="linkType">drill-through</property>
                                     <property name="reportName">detail.rptdesign</property>
-                                    <property name="targetWindow">_blank</property>
+                                    <property name="targetWindow">_self</property>
                                     <property name="targetFileType">report-design</property>
                                     <list-property name="paramBindings">
                                         <structure>

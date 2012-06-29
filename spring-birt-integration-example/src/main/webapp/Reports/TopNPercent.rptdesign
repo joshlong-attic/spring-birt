@@ -7,39 +7,45 @@
     <property name="layoutPreference">auto layout</property>
     <list-property name="configVars">
         <structure>
-            <property name="name">Top Count</property>
+            <property name="name">TopCount</property>
             <property name="value">5</property>
         </structure>
         <structure>
-            <property name="name">Top Percentage</property>
+            <property name="name">TopPercentage</property>
             <property name="value">25</property>
         </structure>
     </list-property>
     <parameters>
-        <scalar-parameter name="Top Count" id="87">
+        <scalar-parameter name="TopCount" id="87">
             <text-property name="helpText">Enter the number of customers you wish included in the top "N" graph of the report</text-property>
             <text-property name="promptText">Number of Customers for Top "N" Chart</text-property>
             <property name="valueType">static</property>
             <property name="isRequired">true</property>
             <property name="dataType">decimal</property>
+            <property name="distinct">true</property>
             <simple-property-list name="defaultValue">
                 <value type="constant">5</value>
             </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
             <property name="controlType">text-box</property>
             <structure name="format">
                 <property name="category">Unformatted</property>
                 <property name="pattern">Unformatted</property>
             </structure>
         </scalar-parameter>
-        <scalar-parameter name="Top Percentage" id="88">
+        <scalar-parameter name="TopPercentage" id="88">
             <text-property name="helpText">Enter the percentage of customers you wish included in the top N% listing of the report</text-property>
             <text-property name="promptText">Percentage of Customers for Top N% Listing</text-property>
             <property name="valueType">static</property>
             <property name="isRequired">true</property>
             <property name="dataType">decimal</property>
+            <property name="distinct">true</property>
             <simple-property-list name="defaultValue">
                 <value type="constant">25</value>
             </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
             <property name="controlType">text-box</property>
             <structure name="format">
                 <property name="category">Unformatted</property>
@@ -67,8 +73,8 @@
             </list-property>
             <property name="odaDriverClass">com.mysql.jdbc.Driver</property>
             <property name="odaURL">jdbc:mysql://localhost/classicmodels</property>
-            <property name="odaUser">root</property>
-            <encrypted-property name="odaPassword" encryptionID="base64">cm9vdA==</encrypted-property>
+            <property name="odaUser">birt</property>
+            <encrypted-property name="odaPassword" encryptionID="base64">YmlydA==</encrypted-property>
         </oda-data-source>
     </data-sources>
     <data-sets>
@@ -163,7 +169,7 @@ order by CUSTOMERTOTAL]]></xml-property>
                                 <property name="fontStyle">italic</property>
                                 <property name="paddingLeft">5pt</property>
                                 <property name="contentType">html</property>
-                                <text-property name="content"><![CDATA[Top <VALUE-OF>params["Top Count"]</VALUE-OF> / Top <VALUE-OF>params["Top Percentage"]</VALUE-OF>% Customers by Revenue]]></text-property>
+                                <text-property name="content"><![CDATA[Top <VALUE-OF>params["TopCount"]</VALUE-OF> / Top <VALUE-OF>params["TopPercentage"]</VALUE-OF>% Customers by Revenue]]></text-property>
                             </text>
                         </cell>
                         <cell id="150">
@@ -234,7 +240,7 @@ order by CUSTOMERTOTAL]]></xml-property>
                         <property name="fontSize">16pt</property>
                         <property name="fontWeight">bold</property>
                         <property name="contentType">html</property>
-                        <text-property name="content"><![CDATA[Top <VALUE-OF>params["Top Count"]</VALUE-OF> / Top <VALUE-OF>params["Top Percentage"]</VALUE-OF>% Customers by Revenue]]></text-property>
+                        <text-property name="content"><![CDATA[Top <VALUE-OF>params["TopCount"]</VALUE-OF> / Top <VALUE-OF>params["TopPercentage"]</VALUE-OF>% Customers by Revenue]]></text-property>
                     </text>
                 </cell>
             </row>
@@ -259,7 +265,7 @@ order by CUSTOMERTOTAL]]></xml-property>
                         <property name="fontSize">16pt</property>
                         <property name="paddingTop">5pt</property>
                         <property name="contentType">html</property>
-                        <text-property name="content"><![CDATA[Top <VALUE-OF>params["Top Count"]</VALUE-OF> Customers]]></text-property>
+                        <text-property name="content"><![CDATA[Top <VALUE-OF>params["TopCount"]</VALUE-OF> Customers]]></text-property>
                     </text>
                 </cell>
             </row>
@@ -1381,7 +1387,7 @@ order by CUSTOMERTOTAL]]></xml-property>
                                 <property name="operator">top-n</property>
                                 <expression name="expr">row["CUSTOMERTOTAL"]</expression>
                                 <simple-property-list name="value1">
-                                    <value>params["Top Count"]</value>
+                                    <value>params["TopCount"]</value>
                                 </simple-property-list>
                             </structure>
                         </list-property>
@@ -1425,7 +1431,7 @@ order by CUSTOMERTOTAL]]></xml-property>
                         <property name="paddingTop">5pt</property>
                         <property name="paddingBottom">5pt</property>
                         <property name="contentType">html</property>
-                        <text-property name="content"><![CDATA[Top <VALUE-OF>params["Top Percentage"]</VALUE-OF>% Customers (sorted by name)]]></text-property>
+                        <text-property name="content"><![CDATA[Top <VALUE-OF>params["TopPercentage"]</VALUE-OF>% Customers (sorted by name)]]></text-property>
                     </text>
                 </cell>
             </row>
@@ -1460,7 +1466,7 @@ order by CUSTOMERTOTAL]]></xml-property>
                                 <property name="operator">top-percent</property>
                                 <expression name="expr">row["CUSTOMERTOTAL"]</expression>
                                 <simple-property-list name="value1">
-                                    <value>params["Top Percentage"]</value>
+                                    <value>params["TopPercentage"]</value>
                                 </simple-property-list>
                             </structure>
                         </list-property>

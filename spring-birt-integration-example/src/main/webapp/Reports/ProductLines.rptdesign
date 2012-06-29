@@ -24,8 +24,8 @@
             </list-property>
             <property name="odaDriverClass">com.mysql.jdbc.Driver</property>
             <property name="odaURL">jdbc:mysql://localhost/classicmodels</property>
-            <property name="odaUser">root</property>
-            <encrypted-property name="odaPassword" encryptionID="base64">cm9vdA==</encrypted-property>
+            <property name="odaUser">birt</property>
+            <encrypted-property name="odaPassword" encryptionID="base64">YmlydA==</encrypted-property>
         </oda-data-source>
     </data-sources>
     <data-sets>
