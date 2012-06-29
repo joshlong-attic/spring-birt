@@ -97,9 +97,9 @@ public class SpringActionHandler implements IHTMLActionHandler {
         if (reportName != null && !reportName.equals("")) {
             link.append(baseURL);
             String format = action.getFormat();
-            System.out.println(reportName);
+
             String reportAction = reportName.replaceAll("(?i).rptdesign", "");
-            System.out.println(reportAction);
+
             try {
                 //link.append("?" + this.mReportsKey + "=");
                 link.append("/");
