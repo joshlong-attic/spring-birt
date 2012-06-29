@@ -18,15 +18,11 @@ import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.*;
 
 /**
  * @author Jason Weathersby
  * @author Josh Long
- *
  */
 @Deprecated
 public class BirtView extends AbstractView implements InitializingBean {
@@ -42,9 +38,9 @@ public class BirtView extends AbstractView implements InitializingBean {
     private BirtViewResourcePathCallback birtViewResourcePathCallback;
     private String requestEncoding = "UTF-8";
 
-    @Inject 
-    private SimpleDriverDataSource  simpleDriverDataSource ;    
-    
+    @Inject
+    private SimpleDriverDataSource simpleDriverDataSource;
+
     /**
      * Perform common validation on the state of this object
      *
@@ -90,7 +86,6 @@ public class BirtView extends AbstractView implements InitializingBean {
     public void setImagesDirectory(String imagesDirectory) {
         this.imagesDirectory = imagesDirectory;
     }
-
 
 
     public static interface BirtViewResourcePathCallback {
@@ -144,7 +139,7 @@ public class BirtView extends AbstractView implements InitializingBean {
 
     @SuppressWarnings("unchecked")
     protected void renderMergedOutputModel(Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        FileInputStream fis = null ;
+        FileInputStream fis = null;
         try {
             String reportName = request.getParameter(this.reportNameRequestParameter);
             String format = request.getParameter(this.reportFormatRequestParameter);
@@ -202,13 +197,13 @@ public class BirtView extends AbstractView implements InitializingBean {
                 runAndRenderTask.setRenderOption(options);
             }
 
-            if( this.simpleDriverDataSource !=  null){
-            	Connection con = this.simpleDriverDataSource.getConnection();
-            	runAndRenderTask.getAppContext().put(IConnectionFactory.PASS_IN_CONNECTION, con);
-            	//runAndRenderTask.getAppContext().put(IConnectionFactory.CLOSE_PASS_IN_CONNECTION,true);
-            	System.out.println("Using Supplied Connection" + con );
-            }else{
-            	System.out.println("No Using Supplied Connection");
+            if (this.simpleDriverDataSource != null) {
+                Connection con = this.simpleDriverDataSource.getConnection();
+                runAndRenderTask.getAppContext().put(IConnectionFactory.PASS_IN_CONNECTION, con);
+                //runAndRenderTask.getAppContext().put(IConnectionFactory.CLOSE_PASS_IN_CONNECTION,true);
+                System.out.println("Using Supplied Connection" + con);
+            } else {
+                System.out.println("No Using Supplied Connection");
 
             }
             runAndRenderTask.getAppContext().put(EngineConstants.APPCONTEXT_BIRT_VIEWER_HTTPSERVET_REQUEST, request);
@@ -222,7 +217,7 @@ public class BirtView extends AbstractView implements InitializingBean {
         } catch (Throwable th) {
             throw new RuntimeException(th); // nothing useful to do here
         } finally {
-            if(null !=fis) // todo who closes the InputStream?
+            if (null != fis) // todo who closes the InputStream?
                 IOUtils.closeQuietly(fis);
         }
     }

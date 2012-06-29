@@ -24,7 +24,7 @@ import java.util.logging.Level;
  * @author Jason Weathersby
  * @author Josh Long
  */
-public class BirtEngineFactory implements FactoryBean<IReportEngine>, ApplicationContextAware, DisposableBean , InitializingBean {
+public class BirtEngineFactory implements FactoryBean<IReportEngine>, ApplicationContextAware, DisposableBean, InitializingBean {
 
     public static final String DEFAULT_SPRING_APPLICATION_CONTEXT_KEY = "spring";
 
@@ -109,9 +109,9 @@ public class BirtEngineFactory implements FactoryBean<IReportEngine>, Applicatio
 
     public void afterPropertiesSet() throws Exception {
         // log directory
-        if(null !=logDirectory){
-        Assert.isTrue(logDirectory.isDirectory(), "the path given must be a directory");
-        Assert.isTrue(logDirectory.exists(), "the path specified must exist");
+        if (null != logDirectory) {
+            Assert.isTrue(logDirectory.isDirectory(), "the path given must be a directory");
+            Assert.isTrue(logDirectory.exists(), "the path specified must exist");
         }
         // required properties
         Assert.notNull(exposedSpringApplicationContextKey, "you must provide a valid value for the 'exposedSpringApplicationContextKey' attribute");

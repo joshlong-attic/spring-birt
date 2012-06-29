@@ -6,8 +6,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -25,7 +23,7 @@ import java.sql.Driver;
 public class BirtDataServiceConfiguration {
 
     @Inject
-    private Environment environment ;
+    private Environment environment;
 
     @Bean
     public PlatformTransactionManager transactionManager() throws Exception {
@@ -35,12 +33,12 @@ public class BirtDataServiceConfiguration {
     @Bean
     @SuppressWarnings("unchecked")
     public DataSource dataSource() throws Exception {
- /*       return new EmbeddedDatabaseBuilder()
-                .setName("crm")
-                .setType(EmbeddedDatabaseType.H2)
-                .build();*/
+        /*       return new EmbeddedDatabaseBuilder()
+        .setName("crm")
+        .setType(EmbeddedDatabaseType.H2)
+        .build();*/
 
-     // here's how you would do this if you were connecting to a
+        // here's how you would do this if you were connecting to a
         // regular DS (perhaps a real PostgreSQL instance or a non in-memory H2 instance)
         SimpleDriverDataSource simpleDriverDataSource = new SimpleDriverDataSource();
 

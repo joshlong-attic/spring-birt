@@ -23,16 +23,14 @@ import javax.inject.Inject;
 @Configuration
 public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
 
-    static private final String PDF_BIRT = "pdf";
-
-    static private final String HTML_BIRT = "html";
+    static private final String BIRT_HTML_VIEW = "htmlBirt";
 
     @Inject
     private BirtDataServiceConfiguration birtDataServiceConfiguration;
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/reports").setViewName(HTML_BIRT);
+        registry.addViewController("/reports").setViewName(BIRT_HTML_VIEW);
     }
 
     @Override
@@ -40,7 +38,7 @@ public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("images/*").addResourceLocations("/images/");
     }
 
-    @Bean(name = HTML_BIRT)
+    @Bean(name = BIRT_HTML_VIEW)
     public HtmlSingleFormatBirtView htmlBirt() throws Exception {
         HtmlSingleFormatBirtView htmlSingleFormatBirtView = new HtmlSingleFormatBirtView();
         htmlSingleFormatBirtView.setBirtEngine(this.engine().getObject());

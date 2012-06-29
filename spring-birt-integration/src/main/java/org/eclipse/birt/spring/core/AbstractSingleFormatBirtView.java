@@ -1,6 +1,8 @@
 package org.eclipse.birt.spring.core;
 
 import org.apache.commons.io.IOUtils;
+
+
 import org.eclipse.birt.report.data.oda.jdbc.IConnectionFactory;
 import org.eclipse.birt.report.engine.api.*;
 import org.eclipse.birt.report.model.api.IModuleOption;
@@ -8,22 +10,33 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.view.AbstractView;
-
 import javax.servlet.ServletContext;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.FileInputStream;
 import java.util.*;
 
-
 /**
- * Base class for BIRT view hierarchy
+ * Base class for BIRT-based {@link org.springframework.web.servlet.View views}.
  *
- * @author Jason Weathersby
- * @author Josh Long
  */
 abstract public class AbstractSingleFormatBirtView extends AbstractView implements InitializingBean {
+
+    public static interface BirtViewResourcePathCallback {
+
+        String baseImageUrl(ServletContext sc, HttpServletRequest r, String reportName) throws Throwable;
+
+        String baseUrl(ServletContext sc, HttpServletRequest r, String reportName) throws Throwable;
+
+        String pathForReport(ServletContext servletContext, HttpServletRequest r, String reportName) throws Throwable;
+
+        String imageDirectory(ServletContext sc, HttpServletRequest request, String reportName);
+
+        String resourceDirectory(ServletContext sc, HttpServletRequest request, String reportName);
+
+    }
 
     private DataSource dataSource;
 
@@ -112,20 +125,6 @@ abstract public class AbstractSingleFormatBirtView extends AbstractView implemen
         this.imagesDirectory = imagesDirectory;
     }
 
-    public static interface BirtViewResourcePathCallback {
-
-        String baseImageUrl(ServletContext sc, HttpServletRequest r, String reportName) throws Throwable;
-
-        String baseUrl(ServletContext sc, HttpServletRequest r, String reportName) throws Throwable;
-
-        String pathForReport(ServletContext servletContext, HttpServletRequest r, String reportName) throws Throwable;
-
-        String imageDirectory(ServletContext sc, HttpServletRequest request, String reportName);
-
-        String resourceDirectory(ServletContext sc, HttpServletRequest request, String reportName);
-
-    }
-
     public static class SimpleBirtViewResourcePathPathCallback implements BirtViewResourcePathCallback {
 
         private String reportFolder, imagesFolder, resourceFolder;
@@ -167,13 +166,13 @@ abstract public class AbstractSingleFormatBirtView extends AbstractView implemen
     }
 
 
-    abstract protected RenderOption renderReport(Map<String, Object> map, HttpServletRequest request, HttpServletResponse response,
-                                                 BirtViewResourcePathCallback resourcePathCallback, Map<String, Object> appContextValuesMap,
-                                                 String reportName, String format, IRenderOption options) throws Throwable;
-
     public void setRenderOption(IRenderOption renderOption) {
         this.renderOption = renderOption;
     }
+
+    abstract protected RenderOption renderReport(Map<String, Object> map, HttpServletRequest request, HttpServletResponse response,
+                                                 BirtViewResourcePathCallback resourcePathCallback, Map<String, Object> appContextValuesMap,
+                                                 String reportName, String format, IRenderOption options) throws Throwable;
 
     @SuppressWarnings("unchecked")
     protected void renderMergedOutputModel(Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {

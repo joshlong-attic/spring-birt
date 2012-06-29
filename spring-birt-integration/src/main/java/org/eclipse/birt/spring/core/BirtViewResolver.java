@@ -7,6 +7,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
  * and then resolves it using the appropriate {@link BirtView Birt view implementation}.
  *
  * @author Josh Long
+ * @author Jason Weathersby
  */
 public class BirtViewResolver extends UrlBasedViewResolver {
 
