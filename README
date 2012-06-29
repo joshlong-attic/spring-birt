@@ -1,0 +1,22 @@
+How to setup this application
+
+=================================================================================
+DATABASE
+
+1) to setup the database, you need to setup the demo schema in MySQL:
+
+ mysql -uroot
+    create database classicmodels;
+    create user birt;
+    grant all privileges on classicmodels.* to birt@'127.0.0.1' identified by 'birt' ;
+    grant all privileges on classicmodels.* to birt@'%' identified by 'birt' ;
+
+2) then, in the mysql/ directory in the ClassicModels folder in the archive that you can download from this page http://www.eclipse.org/birt/phoenix/db/#install (http://www.eclipse.org/birt/phoenix/db/mysqlscr/birt-database-2_0_1.zip)
+ mysqlimport --lines-terminated-by='\r\n' --fields-terminated-by=, --fields-enclosed-by='"' -uroot --local classicmodels datafiles/Orders.txt
+ mysqlimport --lines-terminated-by='\r\n' --fields-terminated-by=, --fields-enclosed-by='"' -uroot --local classicmodels datafiles/Products.txt
+ mysqlimport --lines-terminated-by='\r\n' --fields-terminated-by=, --fields-enclosed-by='"' -uroot --local classicmodels datafiles/Payments.txt
+ mysqlimport --lines-terminated-by='\r\n' --fields-terminated-by=, --fields-enclosed-by='"' -uroot --local classicmodels datafiles/Offices.txt
+ mysqlimport --lines-terminated-by='\r\n' --fields-terminated-by=, --fields-enclosed-by='"' -uroot --local classicmodels datafiles/OrderDetails.txt
+ mysqlimport --lines-terminated-by='\r\n' --fields-terminated-by=, --fields-enclosed-by='"' -uroot --local classicmodels datafiles/Customers.txt
+ mysqlimport --lines-terminated-by='\r\n' --fields-terminated-by=, --fields-enclosed-by='"' -uroot --local classicmodels datafiles/Employees.txt
+
