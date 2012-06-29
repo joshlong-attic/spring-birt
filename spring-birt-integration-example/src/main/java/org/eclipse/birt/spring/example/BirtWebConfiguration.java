@@ -1,8 +1,5 @@
 package org.eclipse.birt.spring.example;
 
-import java.io.File;
-import java.util.logging.Level;
-
 import org.eclipse.birt.spring.core.BirtEngineFactory;
 import org.eclipse.birt.spring.core.HtmlSingleFormatBirtView;
 import org.springframework.context.annotation.Bean;
@@ -26,10 +23,12 @@ import javax.inject.Inject;
 @Configuration
 public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
 
-    static private final String HTML_BIRT = "html", PDF_BIRT = "pdf";
+    static private final String PDF_BIRT = "pdf";
+
+    static private final String HTML_BIRT = "html";
 
     @Inject
-    BirtDataServiceConfiguration birtDataServiceConfiguration;
+    private BirtDataServiceConfiguration birtDataServiceConfiguration;
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -41,38 +40,22 @@ public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("images/*").addResourceLocations("/images/");
     }
 
-
     @Bean(name = HTML_BIRT)
     public HtmlSingleFormatBirtView htmlBirt() throws Exception {
-
         HtmlSingleFormatBirtView htmlSingleFormatBirtView = new HtmlSingleFormatBirtView();
         htmlSingleFormatBirtView.setBirtEngine(this.engine().getObject());
         htmlSingleFormatBirtView.setDataSource(birtDataServiceConfiguration.dataSource());
-
         return htmlSingleFormatBirtView;
-     }
-
-/*
-@Bean
-public BirtView birtView() {
-    BirtView view = new BirtView();
-    view.setBirtEngine(this.engine().getObject());
-    return view;
-}*/
-
-    // this simply looks up other reports by their bean name
+    }
 
     @Bean
     public ViewResolver beanNameResolver() {
         return new BeanNameViewResolver();
-        //BirtViewResolver birtViewResolver = new BirtViewResolver();
-//        return birtViewResolver ;
     }
 
     @Bean
     public BirtEngineFactory engine() {
         return new BirtEngineFactory();
     }
-
 
 } 
