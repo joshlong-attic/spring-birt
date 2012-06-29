@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.22" id="1">
-    <property name="createdBy">Eclipse BIRT Designer Version 3.7.1.v20110905 Build &lt;3.7.1.v20110905-1820></property>
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
+    <property name="createdBy">Eclipse BIRT Designer Version 3.7.2.v20120213 Build &lt;3.7.2.v20120214-1408></property>
     <property name="units">in</property>
     <property name="iconFile">/templates/blank_report.gif</property>
     <property name="bidiLayoutOrientation">ltr</property>
@@ -22,10 +22,17 @@
                     <name>metadataBidiFormatStr</name>
                     <value>ILYNN</value>
                 </ex-property>
+                <ex-property>
+                    <name>disabledMetadataBidiFormatStr</name>
+                </ex-property>
+                <ex-property>
+                    <name>disabledContentBidiFormatStr</name>
+                </ex-property>
             </list-property>
-            <property name="odaDriverClass">org.eclipse.birt.report.data.oda.sampledb.Driver</property>
-            <property name="odaURL">jdbc:classicmodels:sampledb</property>
-            <property name="odaUser">ClassicModels</property>
+            <property name="odaDriverClass">com.mysql.jdbc.Driver</property>
+            <property name="odaURL">jdbc:mysql://localhost/classicmodels</property>
+            <property name="odaUser">root</property>
+            <encrypted-property name="odaPassword" encryptionID="base64">cm9vdA==</encrypted-property>
         </oda-data-source>
     </data-sources>
     <data-sets>
@@ -296,7 +303,7 @@ GROUP BY CLASSICMODELS.PRODUCTS.PRODUCTLINE
                     <property name="rowSpan">1</property>
                     <property name="textAlign">center</property>
                     <label id="50">
-                        <text-property name="text">My DashBoard</text-property>
+                        <text-property name="text">Sales DashBoard</text-property>
                     </label>
                 </cell>
             </row>

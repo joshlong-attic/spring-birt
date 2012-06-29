@@ -37,8 +37,9 @@
             <artifactId>javax.inject</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+            <groupId>org.eclipse.birt.runtime</groupId>
             <artifactId>org.eclipse.birt.runtime</artifactId>
+            <version>3.7.2.v20120214-1408</version>
         </dependency>
     </dependencies>
 </project>

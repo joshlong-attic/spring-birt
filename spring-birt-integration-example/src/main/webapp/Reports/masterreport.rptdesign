@@ -1,84 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.22" id="1">
-    <property name="createdBy">Eclipse BIRT Designer Version 3.7.1.v20110905 Build &lt;3.7.1.v20110905-1820></property>
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
+    <property name="createdBy">Eclipse BIRT Designer Version 3.7.2.v20120213 Build &lt;3.7.2.v20120214-1408></property>
     <property name="units">in</property>
     <property name="iconFile">/templates/blank_report.gif</property>
     <property name="layoutPreference">auto layout</property>
     <property name="bidiLayoutOrientation">ltr</property>
     <data-sources>
         <oda-data-source extensionID="org.eclipse.birt.report.data.oda.jdbc" name="Data Source" id="7">
-            <property name="odaDriverClass">org.eclipse.birt.report.data.oda.sampledb.Driver</property>
-            <property name="odaURL">jdbc:classicmodels:sampledb</property>
-            <property name="odaUser">ClassicModels</property>
+            <list-property name="privateDriverProperties">
+                <ex-property>
+                    <name>metadataBidiFormatStr</name>
+                    <value>ILYNN</value>
+                </ex-property>
+                <ex-property>
+                    <name>disabledMetadataBidiFormatStr</name>
+                </ex-property>
+                <ex-property>
+                    <name>contentBidiFormatStr</name>
+                    <value>ILYNN</value>
+                </ex-property>
+                <ex-property>
+                    <name>disabledContentBidiFormatStr</name>
+                </ex-property>
+            </list-property>
+            <property name="odaDriverClass">com.mysql.jdbc.Driver</property>
+            <property name="odaURL">jdbc:mysql://localhost/classicmodels</property>
+            <property name="odaUser">root</property>
+            <encrypted-property name="odaPassword" encryptionID="base64">cm9vdA==</encrypted-property>
         </oda-data-source>
     </data-sources>
     <data-sets>
-        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Data Set" id="8">
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Data Set" id="202">
             <list-property name="columnHints">
                 <structure>
-                    <property name="columnName">ORDERNUMBER</property>
-                    <text-property name="displayName">ORDERNUMBER</text-property>
+                    <property name="columnName">orderNumber</property>
+                    <text-property name="displayName">orderNumber</text-property>
+                    <text-property name="heading">orderNumber</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">ORDERDATE</property>
-                    <text-property name="displayName">ORDERDATE</text-property>
+                    <property name="columnName">orderDate</property>
+                    <text-property name="displayName">orderDate</text-property>
+                    <text-property name="heading">orderDate</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">REQUIREDDATE</property>
-                    <text-property name="displayName">REQUIREDDATE</text-property>
+                    <property name="columnName">requiredDate</property>
+                    <text-property name="displayName">requiredDate</text-property>
+                    <text-property name="heading">requiredDate</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">SHIPPEDDATE</property>
-                    <text-property name="displayName">SHIPPEDDATE</text-property>
+                    <property name="columnName">shippedDate</property>
+                    <text-property name="displayName">shippedDate</text-property>
+                    <text-property name="heading">shippedDate</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">STATUS</property>
-                    <text-property name="displayName">STATUS</text-property>
+                    <property name="columnName">status</property>
+                    <text-property name="displayName">status</text-property>
+                    <text-property name="heading">status</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">COMMENTS</property>
-                    <text-property name="displayName">COMMENTS</text-property>
+                    <property name="columnName">comments</property>
+                    <text-property name="displayName">comments</text-property>
+                    <text-property name="heading">comments</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">CUSTOMERNUMBER</property>
-                    <text-property name="displayName">CUSTOMERNUMBER</text-property>
+                    <property name="columnName">customerNumber</property>
+                    <text-property name="displayName">customerNumber</text-property>
+                    <text-property name="heading">customerNumber</text-property>
                 </structure>
             </list-property>
             <structure name="cachedMetaData">
                 <list-property name="resultSet">
                     <structure>
                         <property name="position">1</property>
-                        <property name="name">ORDERNUMBER</property>
+                        <property name="name">orderNumber</property>
                         <property name="dataType">integer</property>
                     </structure>
                     <structure>
                         <property name="position">2</property>
-                        <property name="name">ORDERDATE</property>
-                        <property name="dataType">date</property>
+                        <property name="name">orderDate</property>
+                        <property name="dataType">date-time</property>
                     </structure>
                     <structure>
                         <property name="position">3</property>
-                        <property name="name">REQUIREDDATE</property>
-                        <property name="dataType">date</property>
+                        <property name="name">requiredDate</property>
+                        <property name="dataType">date-time</property>
                     </structure>
                     <structure>
                         <property name="position">4</property>
-                        <property name="name">SHIPPEDDATE</property>
-                        <property name="dataType">date</property>
+                        <property name="name">shippedDate</property>
+                        <property name="dataType">date-time</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
-                        <property name="name">STATUS</property>
+                        <property name="name">status</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">6</property>
-                        <property name="name">COMMENTS</property>
+                        <property name="name">comments</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
                         <property name="position">7</property>
-                        <property name="name">CUSTOMERNUMBER</property>
+                        <property name="name">customerNumber</property>
                         <property name="dataType">integer</property>
                     </structure>
                 </list-property>
@@ -87,50 +111,50 @@
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
-                    <property name="name">ORDERNUMBER</property>
-                    <property name="nativeName">ORDERNUMBER</property>
+                    <property name="name">orderNumber</property>
+                    <property name="nativeName">orderNumber</property>
                     <property name="dataType">integer</property>
                     <property name="nativeDataType">4</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
-                    <property name="name">ORDERDATE</property>
-                    <property name="nativeName">ORDERDATE</property>
-                    <property name="dataType">date</property>
-                    <property name="nativeDataType">91</property>
+                    <property name="name">orderDate</property>
+                    <property name="nativeName">orderDate</property>
+                    <property name="dataType">date-time</property>
+                    <property name="nativeDataType">93</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
-                    <property name="name">REQUIREDDATE</property>
-                    <property name="nativeName">REQUIREDDATE</property>
-                    <property name="dataType">date</property>
-                    <property name="nativeDataType">91</property>
+                    <property name="name">requiredDate</property>
+                    <property name="nativeName">requiredDate</property>
+                    <property name="dataType">date-time</property>
+                    <property name="nativeDataType">93</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
-                    <property name="name">SHIPPEDDATE</property>
-                    <property name="nativeName">SHIPPEDDATE</property>
-                    <property name="dataType">date</property>
-                    <property name="nativeDataType">91</property>
+                    <property name="name">shippedDate</property>
+                    <property name="nativeName">shippedDate</property>
+                    <property name="dataType">date-time</property>
+                    <property name="nativeDataType">93</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
-                    <property name="name">STATUS</property>
-                    <property name="nativeName">STATUS</property>
+                    <property name="name">status</property>
+                    <property name="nativeName">status</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">6</property>
-                    <property name="name">COMMENTS</property>
-                    <property name="nativeName">COMMENTS</property>
+                    <property name="name">comments</property>
+                    <property name="nativeName">comments</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">7</property>
-                    <property name="name">CUSTOMERNUMBER</property>
-                    <property name="nativeName">CUSTOMERNUMBER</property>
+                    <property name="name">customerNumber</property>
+                    <property name="nativeName">customerNumber</property>
                     <property name="dataType">integer</property>
                     <property name="nativeDataType">4</property>
                 </structure>
@@ -139,24 +163,26 @@
 from orders]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
-  <Version>1.0</Version>
+  <Version>2.0</Version>
   <design:ResultSets derivedMetaData="true">
     <design:resultSetDefinitions>
       <design:resultSetColumns>
         <design:resultColumnDefinitions>
           <design:attributes>
-            <design:name>ORDERNUMBER</design:name>
-            <design:position>1</design:position>
+            <design:identifier>
+              <design:name>orderNumber</design:name>
+              <design:position>1</design:position>
+            </design:identifier>
             <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
-            <design:precision>10</design:precision>
+            <design:precision>11</design:precision>
             <design:scale>0</design:scale>
-            <design:nullability>Nullable</design:nullability>
+            <design:nullability>NotNullable</design:nullability>
             <design:uiHints>
-              <design:displayName>ORDERNUMBER</design:displayName>
+              <design:displayName>orderNumber</design:displayName>
             </design:uiHints>
           </design:attributes>
           <design:usageHints>
-            <design:label>ORDERNUMBER</design:label>
+            <design:label>orderNumber</design:label>
             <design:formattingHints>
               <design:displaySize>11</design:displaySize>
             </design:formattingHints>
@@ -164,75 +190,83 @@ from orders]]></xml-property>
         </design:resultColumnDefinitions>
         <design:resultColumnDefinitions>
           <design:attributes>
-            <design:name>ORDERDATE</design:name>
-            <design:position>2</design:position>
-            <design:nativeDataTypeCode>91</design:nativeDataTypeCode>
-            <design:precision>10</design:precision>
+            <design:identifier>
+              <design:name>orderDate</design:name>
+              <design:position>2</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>93</design:nativeDataTypeCode>
+            <design:precision>19</design:precision>
             <design:scale>0</design:scale>
-            <design:nullability>Nullable</design:nullability>
+            <design:nullability>NotNullable</design:nullability>
             <design:uiHints>
-              <design:displayName>ORDERDATE</design:displayName>
+              <design:displayName>orderDate</design:displayName>
             </design:uiHints>
           </design:attributes>
           <design:usageHints>
-            <design:label>ORDERDATE</design:label>
+            <design:label>orderDate</design:label>
             <design:formattingHints>
-              <design:displaySize>10</design:displaySize>
+              <design:displaySize>19</design:displaySize>
             </design:formattingHints>
           </design:usageHints>
         </design:resultColumnDefinitions>
         <design:resultColumnDefinitions>
           <design:attributes>
-            <design:name>REQUIREDDATE</design:name>
-            <design:position>3</design:position>
-            <design:nativeDataTypeCode>91</design:nativeDataTypeCode>
-            <design:precision>10</design:precision>
+            <design:identifier>
+              <design:name>requiredDate</design:name>
+              <design:position>3</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>93</design:nativeDataTypeCode>
+            <design:precision>19</design:precision>
             <design:scale>0</design:scale>
-            <design:nullability>Nullable</design:nullability>
+            <design:nullability>NotNullable</design:nullability>
             <design:uiHints>
-              <design:displayName>REQUIREDDATE</design:displayName>
+              <design:displayName>requiredDate</design:displayName>
             </design:uiHints>
           </design:attributes>
           <design:usageHints>
-            <design:label>REQUIREDDATE</design:label>
+            <design:label>requiredDate</design:label>
             <design:formattingHints>
-              <design:displaySize>10</design:displaySize>
+              <design:displaySize>19</design:displaySize>
             </design:formattingHints>
           </design:usageHints>
         </design:resultColumnDefinitions>
         <design:resultColumnDefinitions>
           <design:attributes>
-            <design:name>SHIPPEDDATE</design:name>
-            <design:position>4</design:position>
-            <design:nativeDataTypeCode>91</design:nativeDataTypeCode>
-            <design:precision>10</design:precision>
+            <design:identifier>
+              <design:name>shippedDate</design:name>
+              <design:position>4</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>93</design:nativeDataTypeCode>
+            <design:precision>19</design:precision>
             <design:scale>0</design:scale>
             <design:nullability>Nullable</design:nullability>
             <design:uiHints>
-              <design:displayName>SHIPPEDDATE</design:displayName>
+              <design:displayName>shippedDate</design:displayName>
             </design:uiHints>
           </design:attributes>
           <design:usageHints>
-            <design:label>SHIPPEDDATE</design:label>
+            <design:label>shippedDate</design:label>
             <design:formattingHints>
-              <design:displaySize>10</design:displaySize>
+              <design:displaySize>19</design:displaySize>
             </design:formattingHints>
           </design:usageHints>
         </design:resultColumnDefinitions>
         <design:resultColumnDefinitions>
           <design:attributes>
-            <design:name>STATUS</design:name>
-            <design:position>5</design:position>
+            <design:identifier>
+              <design:name>status</design:name>
+              <design:position>5</design:position>
+            </design:identifier>
             <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
             <design:precision>15</design:precision>
             <design:scale>0</design:scale>
-            <design:nullability>Nullable</design:nullability>
+            <design:nullability>NotNullable</design:nullability>
             <design:uiHints>
-              <design:displayName>STATUS</design:displayName>
+              <design:displayName>status</design:displayName>
             </design:uiHints>
           </design:attributes>
           <design:usageHints>
-            <design:label>STATUS</design:label>
+            <design:label>status</design:label>
             <design:formattingHints>
               <design:displaySize>15</design:displaySize>
             </design:formattingHints>
@@ -240,43 +274,48 @@ from orders]]></xml-property>
         </design:resultColumnDefinitions>
         <design:resultColumnDefinitions>
           <design:attributes>
-            <design:name>COMMENTS</design:name>
-            <design:position>6</design:position>
+            <design:identifier>
+              <design:name>comments</design:name>
+              <design:position>6</design:position>
+            </design:identifier>
             <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
-            <design:precision>32700</design:precision>
+            <design:precision>65535</design:precision>
             <design:scale>0</design:scale>
             <design:nullability>Nullable</design:nullability>
             <design:uiHints>
-              <design:displayName>COMMENTS</design:displayName>
+              <design:displayName>comments</design:displayName>
             </design:uiHints>
           </design:attributes>
           <design:usageHints>
-            <design:label>COMMENTS</design:label>
+            <design:label>comments</design:label>
             <design:formattingHints>
-              <design:displaySize>32700</design:displaySize>
+              <design:displaySize>65535</design:displaySize>
             </design:formattingHints>
           </design:usageHints>
         </design:resultColumnDefinitions>
         <design:resultColumnDefinitions>
           <design:attributes>
-            <design:name>CUSTOMERNUMBER</design:name>
-            <design:position>7</design:position>
+            <design:identifier>
+              <design:name>customerNumber</design:name>
+              <design:position>7</design:position>
+            </design:identifier>
             <design:nativeDataTypeCode>4</design:nativeDataTypeCode>
-            <design:precision>10</design:precision>
+            <design:precision>11</design:precision>
             <design:scale>0</design:scale>
-            <design:nullability>Nullable</design:nullability>
+            <design:nullability>NotNullable</design:nullability>
             <design:uiHints>
-              <design:displayName>CUSTOMERNUMBER</design:displayName>
+              <design:displayName>customerNumber</design:displayName>
             </design:uiHints>
           </design:attributes>
           <design:usageHints>
-            <design:label>CUSTOMERNUMBER</design:label>
+            <design:label>customerNumber</design:label>
             <design:formattingHints>
               <design:displaySize>11</design:displaySize>
             </design:formattingHints>
           </design:usageHints>
         </design:resultColumnDefinitions>
       </design:resultSetColumns>
+      <design:criteria/>
     </design:resultSetDefinitions>
   </design:ResultSets>
 </model:DesignValues>]]></xml-property>
@@ -422,117 +461,124 @@ from orders]]></xml-property>
         </simple-master-page>
     </page-setup>
     <body>
-        <table id="9">
-            <property name="width">100%</property>
+        <table id="203">
             <property name="dataSet">Data Set</property>
             <list-property name="boundDataColumns">
                 <structure>
-                    <property name="name">ORDERNUMBER</property>
-                    <text-property name="displayName">ORDERNUMBER</text-property>
-                    <expression name="expression">dataSetRow["ORDERNUMBER"]</expression>
+                    <property name="name">orderNumber</property>
+                    <text-property name="displayName">orderNumber</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["orderNumber"]</expression>
                     <property name="dataType">integer</property>
                 </structure>
                 <structure>
-                    <property name="name">ORDERDATE</property>
-                    <text-property name="displayName">ORDERDATE</text-property>
-                    <expression name="expression">dataSetRow["ORDERDATE"]</expression>
-                    <property name="dataType">date</property>
+                    <property name="name">orderDate</property>
+                    <text-property name="displayName">orderDate</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["orderDate"]</expression>
+                    <property name="dataType">date-time</property>
                 </structure>
                 <structure>
-                    <property name="name">REQUIREDDATE</property>
-                    <text-property name="displayName">REQUIREDDATE</text-property>
-                    <expression name="expression">dataSetRow["REQUIREDDATE"]</expression>
-                    <property name="dataType">date</property>
+                    <property name="name">requiredDate</property>
+                    <text-property name="displayName">requiredDate</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["requiredDate"]</expression>
+                    <property name="dataType">date-time</property>
                 </structure>
                 <structure>
-                    <property name="name">SHIPPEDDATE</property>
-                    <text-property name="displayName">SHIPPEDDATE</text-property>
-                    <expression name="expression">dataSetRow["SHIPPEDDATE"]</expression>
-                    <property name="dataType">date</property>
+                    <property name="name">shippedDate</property>
+                    <text-property name="displayName">shippedDate</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["shippedDate"]</expression>
+                    <property name="dataType">date-time</property>
                 </structure>
                 <structure>
-                    <property name="name">STATUS</property>
-                    <text-property name="displayName">STATUS</text-property>
-                    <expression name="expression">dataSetRow["STATUS"]</expression>
+                    <property name="name">status</property>
+                    <text-property name="displayName">status</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["status"]</expression>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="name">COMMENTS</property>
-                    <text-property name="displayName">COMMENTS</text-property>
-                    <expression name="expression">dataSetRow["COMMENTS"]</expression>
+                    <property name="name">comments</property>
+                    <text-property name="displayName">comments</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["comments"]</expression>
                     <property name="dataType">string</property>
                 </structure>
                 <structure>
-                    <property name="name">CUSTOMERNUMBER</property>
-                    <text-property name="displayName">CUSTOMERNUMBER</text-property>
-                    <expression name="expression">dataSetRow["CUSTOMERNUMBER"]</expression>
+                    <property name="name">customerNumber</property>
+                    <text-property name="displayName">customerNumber</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["customerNumber"]</expression>
                     <property name="dataType">integer</property>
                 </structure>
             </list-property>
-            <column id="48"/>
-            <column id="49"/>
-            <column id="50"/>
-            <column id="51"/>
-            <column id="52"/>
-            <column id="53"/>
-            <column id="54"/>
+            <column id="242"/>
+            <column id="243"/>
+            <column id="244"/>
+            <column id="245"/>
+            <column id="246"/>
+            <column id="247"/>
+            <column id="248"/>
             <header>
-                <row id="10">
-                    <cell id="11">
-                        <label id="12">
-                            <text-property name="text">ORDERNUMBER</text-property>
+                <row id="204">
+                    <cell id="205">
+                        <label id="206">
+                            <text-property name="text">orderNumber</text-property>
                         </label>
                     </cell>
-                    <cell id="13">
-                        <label id="14">
-                            <text-property name="text">ORDERDATE</text-property>
+                    <cell id="207">
+                        <label id="208">
+                            <text-property name="text">orderDate</text-property>
                         </label>
                     </cell>
-                    <cell id="15">
-                        <label id="16">
-                            <text-property name="text">REQUIREDDATE</text-property>
+                    <cell id="209">
+                        <label id="210">
+                            <text-property name="text">requiredDate</text-property>
                         </label>
                     </cell>
-                    <cell id="17">
-                        <label id="18">
-                            <text-property name="text">SHIPPEDDATE</text-property>
+                    <cell id="211">
+                        <label id="212">
+                            <text-property name="text">shippedDate</text-property>
                         </label>
                     </cell>
-                    <cell id="19">
-                        <label id="20">
-                            <text-property name="text">STATUS</text-property>
+                    <cell id="213">
+                        <label id="214">
+                            <text-property name="text">status</text-property>
                         </label>
                     </cell>
-                    <cell id="21">
-                        <label id="22">
-                            <text-property name="text">COMMENTS</text-property>
+                    <cell id="215">
+                        <label id="216">
+                            <text-property name="text">comments</text-property>
                         </label>
                     </cell>
-                    <cell id="23">
-                        <label id="24">
-                            <text-property name="text">CUSTOMERNUMBER</text-property>
+                    <cell id="217">
+                        <label id="218">
+                            <text-property name="text">customerNumber</text-property>
                         </label>
                     </cell>
                 </row>
             </header>
             <detail>
-                <row id="25">
-                    <cell id="26">
-                        <data id="27">
-                            <expression name="bookmark" type="javascript">"testbook"</expression>
-                            <method name="onCreate"><![CDATA[this.helpText = "what";//reportContext.getMessage()]]></method>
-                            <property name="resultSetColumn">ORDERNUMBER</property>
+                <row id="219">
+                    <list-property name="highlightRules">
+                        <structure>
+                            <property name="operator">eq</property>
+                            <property name="backgroundColor">#FFFFFF</property>
+                            <expression name="testExpr" type="javascript">row.__rownum %2</expression>
+                            <simple-property-list name="value1">
+                                <value type="javascript">0</value>
+                            </simple-property-list>
+                        </structure>
+                    </list-property>
+                    <cell id="220">
+                        <data id="221">
+                            <property name="resultSetColumn">orderNumber</property>
                             <list-property name="action">
                                 <structure>
                                     <property name="linkType">drill-through</property>
                                     <property name="reportName">detail.rptdesign</property>
-                                    <property name="targetWindow">_self</property>
+                                    <property name="targetWindow">_blank</property>
                                     <property name="targetFileType">report-design</property>
                                     <list-property name="paramBindings">
                                         <structure>
                                             <property name="paramName">order</property>
                                             <simple-property-list name="expression">
-                                                <value>row["ORDERNUMBER"]</value>
+                                                <value type="javascript">row["orderNumber"]</value>
                                             </simple-property-list>
                                         </structure>
                                     </list-property>
@@ -540,52 +586,47 @@ from orders]]></xml-property>
                             </list-property>
                         </data>
                     </cell>
-                    <cell id="28">
-                        <data id="29">
-                            <property name="resultSetColumn">ORDERDATE</property>
-                            <list-property name="action">
-                                <structure>
-                                    <property name="linkType">none</property>
-                                </structure>
-                            </list-property>
+                    <cell id="222">
+                        <data id="223">
+                            <property name="resultSetColumn">orderDate</property>
                         </data>
                     </cell>
-                    <cell id="30">
-                        <data id="31">
-                            <property name="resultSetColumn">REQUIREDDATE</property>
+                    <cell id="224">
+                        <data id="225">
+                            <property name="resultSetColumn">requiredDate</property>
                         </data>
                     </cell>
-                    <cell id="32">
-                        <data id="33">
-                            <property name="resultSetColumn">SHIPPEDDATE</property>
+                    <cell id="226">
+                        <data id="227">
+                            <property name="resultSetColumn">shippedDate</property>
                         </data>
                     </cell>
-                    <cell id="34">
-                        <data id="35">
-                            <property name="resultSetColumn">STATUS</property>
+                    <cell id="228">
+                        <data id="229">
+                            <property name="resultSetColumn">status</property>
                         </data>
                     </cell>
-                    <cell id="36">
-                        <data id="37">
-                            <property name="resultSetColumn">COMMENTS</property>
+                    <cell id="230">
+                        <data id="231">
+                            <property name="resultSetColumn">comments</property>
                         </data>
                     </cell>
-                    <cell id="38">
-                        <data id="39">
-                            <property name="resultSetColumn">CUSTOMERNUMBER</property>
+                    <cell id="232">
+                        <data id="233">
+                            <property name="resultSetColumn">customerNumber</property>
                         </data>
                     </cell>
                 </row>
             </detail>
             <footer>
-                <row id="40">
-                    <cell id="41"/>
-                    <cell id="42"/>
-                    <cell id="43"/>
-                    <cell id="44"/>
-                    <cell id="45"/>
-                    <cell id="46"/>
-                    <cell id="47"/>
+                <row id="234">
+                    <cell id="235"/>
+                    <cell id="236"/>
+                    <cell id="237"/>
+                    <cell id="238"/>
+                    <cell id="239"/>
+                    <cell id="240"/>
+                    <cell id="241"/>
                 </row>
             </footer>
         </table>

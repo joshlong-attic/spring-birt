@@ -1,19 +1,26 @@
 package org.eclipse.birt.spring.core;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.birt.report.data.oda.jdbc.IConnectionFactory;
 import org.eclipse.birt.report.engine.api.*;
 import org.eclipse.birt.report.model.api.IModuleOption;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.view.AbstractView;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 /**
@@ -35,6 +42,9 @@ public class BirtView extends AbstractView implements InitializingBean {
     private BirtViewResourcePathCallback birtViewResourcePathCallback;
     private String requestEncoding = "UTF-8";
 
+    @Inject 
+    private SimpleDriverDataSource  simpleDriverDataSource ;    
+    
     /**
      * Perform common validation on the state of this object
      *
@@ -192,6 +202,15 @@ public class BirtView extends AbstractView implements InitializingBean {
                 runAndRenderTask.setRenderOption(options);
             }
 
+            if( this.simpleDriverDataSource !=  null){
+            	Connection con = this.simpleDriverDataSource.getConnection();
+            	runAndRenderTask.getAppContext().put(IConnectionFactory.PASS_IN_CONNECTION, con);
+            	//runAndRenderTask.getAppContext().put(IConnectionFactory.CLOSE_PASS_IN_CONNECTION,true);
+            	System.out.println("Using Supplied Connection" + con );
+            }else{
+            	System.out.println("No Using Supplied Connection");
+
+            }
             runAndRenderTask.getAppContext().put(EngineConstants.APPCONTEXT_BIRT_VIEWER_HTTPSERVET_REQUEST, request);
             //runAndRenderTask.getAppContext().put("birt.viewer.resource.path", birtViewResourcePathCallback.resourceDirectory(sc, request, reportName));
             runAndRenderTask.run();
