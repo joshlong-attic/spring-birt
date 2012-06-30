@@ -129,8 +129,8 @@ public class SimpleRequestParameterActionHandler implements IHTMLActionHandler {
                                 values = new Object[1];
                                 values[0] = valueObj;
                             }
-                            for (Object value1 : values) {
-                                String value = getDisplayValue(value1);
+                            for (Object objectValue : values) {
+                                String value = getDisplayValue(objectValue);
                                 if (value != null) {
                                     if (quesChar) {
                                         link.append("&").append(URLEncoder.encode(key, "UTF-8")).append("=").append(URLEncoder.encode(value, "UTF-8"));
