@@ -9,6 +9,7 @@
 <c:url value="/SampleSpring" var="sampleSpring"/>
 <c:url value="/masterreport" var="master"/>
 <c:url value="/DashBoard" var="dashboard"/>
+<c:url value="/SubReports" var="subReports"/>
 
 <img alt = "Some data is obvious..." src="${fez}"/>
 <br/>
@@ -24,6 +25,7 @@
 <a href="${master}">Drill Through Example </a>
 <br/>
 <a href="${dashboard}">Resource Folder Example</a>
-
+<br/>
+<a href="${subReports}">Sub Reports Example</a>
 </body>
 </html>

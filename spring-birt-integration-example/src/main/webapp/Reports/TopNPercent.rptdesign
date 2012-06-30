@@ -5,6 +5,11 @@
     <text-property name="title">Top Classic Models Inc. Customers by Revenue</text-property>
     <property name="units">in</property>
     <property name="layoutPreference">auto layout</property>
+    <list-property name="cssStyleSheets">
+        <structure>
+            <property name="fileName">Spring.css</property>
+        </structure>
+    </list-property>
     <list-property name="configVars">
         <structure>
             <property name="name">TopCount</property>
@@ -137,9 +142,6 @@ order by CUSTOMERTOTAL]]></xml-property>
         <style name="BackgroundBlue" id="3">
             <property name="backgroundColor">#4B6987</property>
         </style>
-        <style name="BackgroundYellow" id="4">
-            <property name="backgroundColor">#FAD764</property>
-        </style>
     </styles>
     <page-setup>
         <simple-master-page name="Simple MasterPage" id="8">
@@ -147,6 +149,14 @@ order by CUSTOMERTOTAL]]></xml-property>
             <property name="leftMargin">1.25in</property>
             <property name="bottomMargin">1in</property>
             <property name="rightMargin">1.25in</property>
+            <page-header>
+                <image id="160">
+                    <property name="height">29px</property>
+                    <property name="width">331px</property>
+                    <property name="source">file</property>
+                    <expression name="uri" type="constant">logo_springsource_community.png</expression>
+                </image>
+            </page-header>
             <page-footer>
                 <grid id="141">
                     <property name="width">100%</property>
@@ -188,7 +198,7 @@ order by CUSTOMERTOTAL]]></xml-property>
     </page-setup>
     <body>
         <grid id="10">
-            <property name="width">100%</property>
+            <property name="width">7in</property>
             <column id="11">
                 <property name="width">2.8in</property>
             </column>
@@ -251,19 +261,23 @@ order by CUSTOMERTOTAL]]></xml-property>
             </row>
         </grid>
         <grid id="23">
-            <property name="width">100%</property>
+            <property name="width">7in</property>
             <column id="24"/>
             <row id="25">
                 <property name="height">0.1in</property>
                 <property name="style">BackgroundBlue</property>
-                <cell id="26"/>
+                <cell id="26">
+                    <property name="style">special-detail</property>
+                </cell>
             </row>
             <row id="27">
                 <cell id="28">
                     <text id="91">
+                        <property name="style">special-header</property>
                         <property name="fontFamily">sans-serif</property>
                         <property name="fontSize">16pt</property>
                         <property name="paddingTop">5pt</property>
+                        <property name="textAlign">center</property>
                         <property name="contentType">html</property>
                         <text-property name="content"><![CDATA[Top <VALUE-OF>params["TopCount"]</VALUE-OF> Customers]]></text-property>
                     </text>
@@ -273,6 +287,7 @@ order by CUSTOMERTOTAL]]></xml-property>
                 <cell id="31">
                     <extended-item extensionName="Chart" name="NewChart" id="32">
                         <xml-property name="xmlRepresentation"><![CDATA[<model:ChartWithAxes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:attribute="http://www.birt.eclipse.org/ChartModelAttribute" xmlns:data="http://www.birt.eclipse.org/ChartModelData" xmlns:layout="http://www.birt.eclipse.org/ChartModelLayout" xmlns:model="http://www.birt.eclipse.org/ChartModel" xmlns:type="http://www.birt.eclipse.org/ChartModelType">
+  <Version>2.5.3</Version>
   <Type>Bar Chart</Type>
   <SubType>Side-by-side</SubType>
   <Description>
@@ -387,6 +402,12 @@ order by CUSTOMERTOTAL]]></xml-property>
         </Color>
         <Visible>false</Visible>
       </Outline>
+      <Background xsi:type="attribute:ColorDefinition">
+        <Transparency>255</Transparency>
+        <Red>255</Red>
+        <Green>255</Green>
+        <Blue>255</Blue>
+      </Background>
       <Visible>true</Visible>
       <HorizontalSpacing>5</HorizontalSpacing>
       <VerticalSpacing>5</VerticalSpacing>
@@ -488,6 +509,17 @@ order by CUSTOMERTOTAL]]></xml-property>
       </Text>
       <Orientation>Vertical</Orientation>
       <Direction>Top_Bottom</Direction>
+      <Separator>
+        <Style>Solid</Style>
+        <Thickness>1</Thickness>
+        <Color>
+          <Transparency>255</Transparency>
+          <Red>0</Red>
+          <Green>0</Green>
+          <Blue>0</Blue>
+        </Color>
+        <Visible>true</Visible>
+      </Separator>
       <Position>Right</Position>
       <ItemType>Series</ItemType>
       <Title>
@@ -512,6 +544,7 @@ order by CUSTOMERTOTAL]]></xml-property>
             <Green>0</Green>
             <Blue>0</Blue>
           </Color>
+          <Visible>false</Visible>
         </Outline>
         <Insets>
           <Top>0.0</Top>
@@ -521,6 +554,7 @@ order by CUSTOMERTOTAL]]></xml-property>
         </Insets>
         <Visible>false</Visible>
       </Title>
+      <TitlePosition>Above</TitlePosition>
       <ShowValue>false</ShowValue>
     </Children>
     <Bounds>
@@ -558,10 +592,14 @@ order by CUSTOMERTOTAL]]></xml-property>
     </Background>
     <Visible>true</Visible>
   </Block>
-  <Dimension>Two_Dimensional</Dimension>
+  <Dimension>Two_Dimensional_With_Depth</Dimension>
   <Units>Points</Units>
   <SeriesThickness>10.0</SeriesThickness>
   <GridColumnCount>1</GridColumnCount>
+  <ExtendedProperties>
+    <Name>enable.area.alt</Name>
+    <Value>false</Value>
+  </ExtendedProperties>
   <SampleData>
     <BaseSampleData>
       <DataSetRepresentation>'6.0','7.0','8.0'</DataSetRepresentation>
@@ -582,7 +620,10 @@ order by CUSTOMERTOTAL]]></xml-property>
     <Caption>
       <Value></Value>
       <Font>
-        <Alignment/>
+        <Alignment>
+          <horizontalAlignment>Center</horizontalAlignment>
+          <verticalAlignment>Center</verticalAlignment>
+        </Alignment>
       </Font>
     </Caption>
     <Background xsi:type="attribute:ColorDefinition">
@@ -600,6 +641,7 @@ order by CUSTOMERTOTAL]]></xml-property>
         <Green>0</Green>
         <Blue>0</Blue>
       </Color>
+      <Visible>true</Visible>
     </Outline>
     <Insets>
       <Top>0.0</Top>
@@ -693,11 +735,19 @@ order by CUSTOMERTOTAL]]></xml-property>
           <Definition></Definition>
         </Query>
         <SeriesPalette>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>75</Red>
-            <Green>105</Green>
-            <Blue>135</Blue>
+          <Entries xsi:type="attribute:Gradient">
+            <StartColor>
+              <Transparency>255</Transparency>
+              <Red>193</Red>
+              <Green>205</Green>
+              <Blue>35</Blue>
+            </StartColor>
+            <EndColor>
+              <Transparency>255</Transparency>
+              <Red>65</Red>
+              <Green>124</Green>
+              <Blue>43</Blue>
+            </EndColor>
           </Entries>
         </SeriesPalette>
         <FormatSpecifier xsi:type="attribute:NumberFormatSpecifier">
@@ -712,8 +762,8 @@ order by CUSTOMERTOTAL]]></xml-property>
               <Value>&lt;undefined></Value>
               <Font>
                 <Name>SansSerif</Name>
-                <Size>12.0</Size>
-                <Bold>false</Bold>
+                <Size>10.0</Size>
+                <Bold>true</Bold>
                 <Italic>false</Italic>
                 <Strikethrough>false</Strikethrough>
                 <Underline>false</Underline>
@@ -725,13 +775,13 @@ order by CUSTOMERTOTAL]]></xml-property>
               </Font>
               <Color>
                 <Transparency>255</Transparency>
-                <Red>0</Red>
-                <Green>0</Green>
-                <Blue>0</Blue>
+                <Red>51</Red>
+                <Green>102</Green>
+                <Blue>255</Blue>
               </Color>
             </Caption>
             <Background xsi:type="attribute:ColorDefinition">
-              <Transparency>0</Transparency>
+              <Transparency>255</Transparency>
               <Red>255</Red>
               <Green>255</Green>
               <Blue>255</Blue>
@@ -741,11 +791,11 @@ order by CUSTOMERTOTAL]]></xml-property>
               <Thickness>1</Thickness>
               <Color>
                 <Transparency>255</Transparency>
-                <Red>0</Red>
-                <Green>0</Green>
-                <Blue>0</Blue>
+                <Red>192</Red>
+                <Green>192</Green>
+                <Blue>192</Blue>
               </Color>
-              <Visible>false</Visible>
+              <Visible>true</Visible>
             </Outline>
             <Insets>
               <Top>0.0</Top>
@@ -765,14 +815,15 @@ order by CUSTOMERTOTAL]]></xml-property>
             </Components>
             <Separator>, </Separator>
           </DataPoint>
-          <LabelPosition>Outside</LabelPosition>
+          <LabelPosition>Inside</LabelPosition>
           <Stacked>false</Stacked>
+          <Translucent>true</Translucent>
           <Riser>Rectangle</Riser>
           <RiserOutline>
-            <Transparency>255</Transparency>
-            <Red>0</Red>
-            <Green>0</Green>
-            <Blue>0</Blue>
+            <Transparency>0</Transparency>
+            <Red>255</Red>
+            <Green>255</Green>
+            <Blue>255</Blue>
           </RiserOutline>
         </Series>
         <Grouping>
@@ -788,9 +839,9 @@ order by CUSTOMERTOTAL]]></xml-property>
         <Thickness>1</Thickness>
         <Color>
           <Transparency>255</Transparency>
-          <Red>0</Red>
-          <Green>0</Green>
-          <Blue>0</Blue>
+          <Red>192</Red>
+          <Green>192</Green>
+          <Blue>192</Blue>
         </Color>
         <Visible>true</Visible>
       </LineAttributes>
@@ -798,8 +849,16 @@ order by CUSTOMERTOTAL]]></xml-property>
         <Caption>
           <Value>&lt;undefined></Value>
           <Font>
+            <Size>10.0</Size>
+            <Bold>true</Bold>
             <Alignment/>
           </Font>
+          <Color>
+            <Transparency>255</Transparency>
+            <Red>51</Red>
+            <Green>102</Green>
+            <Blue>255</Blue>
+          </Color>
         </Caption>
         <Background xsi:type="attribute:ColorDefinition">
           <Transparency>0</Transparency>
@@ -836,7 +895,7 @@ order by CUSTOMERTOTAL]]></xml-property>
             <Green>196</Green>
             <Blue>196</Blue>
           </Color>
-          <Visible>false</Visible>
+          <Visible>true</Visible>
         </LineAttributes>
         <TickStyle>Across</TickStyle>
         <TickAttributes>
@@ -861,7 +920,7 @@ order by CUSTOMERTOTAL]]></xml-property>
             <Green>225</Green>
             <Blue>225</Blue>
           </Color>
-          <Visible>false</Visible>
+          <Visible>true</Visible>
         </LineAttributes>
         <TickStyle>Across</TickStyle>
         <TickAttributes>
@@ -1143,11 +1202,19 @@ order by CUSTOMERTOTAL]]></xml-property>
         <Definition>Base Series</Definition>
       </Query>
       <SeriesPalette>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>128</Red>
-          <Green>0</Green>
-          <Blue>0</Blue>
+        <Entries xsi:type="attribute:Gradient">
+          <StartColor>
+            <Transparency>255</Transparency>
+            <Red>193</Red>
+            <Green>205</Green>
+            <Blue>35</Blue>
+          </StartColor>
+          <EndColor>
+            <Transparency>255</Transparency>
+            <Red>65</Red>
+            <Green>124</Green>
+            <Blue>43</Blue>
+          </EndColor>
         </Entries>
         <Entries xsi:type="attribute:ColorDefinition">
           <Transparency>255</Transparency>
@@ -1268,9 +1335,9 @@ order by CUSTOMERTOTAL]]></xml-property>
       <Thickness>1</Thickness>
       <Color>
         <Transparency>255</Transparency>
-        <Red>0</Red>
-        <Green>0</Green>
-        <Blue>0</Blue>
+        <Red>145</Red>
+        <Green>145</Green>
+        <Blue>145</Blue>
       </Color>
       <Visible>true</Visible>
     </LineAttributes>
@@ -1278,8 +1345,16 @@ order by CUSTOMERTOTAL]]></xml-property>
       <Caption>
         <Value>&lt;undefined></Value>
         <Font>
+          <Size>10.0</Size>
+          <Bold>true</Bold>
           <Alignment/>
         </Font>
+        <Color>
+          <Transparency>255</Transparency>
+          <Red>51</Red>
+          <Green>102</Green>
+          <Blue>255</Blue>
+        </Color>
       </Caption>
       <Background xsi:type="attribute:ColorDefinition">
         <Transparency>0</Transparency>
@@ -1316,7 +1391,7 @@ order by CUSTOMERTOTAL]]></xml-property>
           <Green>196</Green>
           <Blue>196</Blue>
         </Color>
-        <Visible>false</Visible>
+        <Visible>true</Visible>
       </LineAttributes>
       <TickStyle>Across</TickStyle>
       <TickAttributes>
@@ -1341,7 +1416,7 @@ order by CUSTOMERTOTAL]]></xml-property>
           <Green>225</Green>
           <Blue>225</Blue>
         </Color>
-        <Visible>false</Visible>
+        <Visible>true</Visible>
       </LineAttributes>
       <TickStyle>Across</TickStyle>
       <TickAttributes>
@@ -1369,6 +1444,18 @@ order by CUSTOMERTOTAL]]></xml-property>
     <CategoryAxis>true</CategoryAxis>
     <Percent>false</Percent>
   </Axes>
+  <WallFill xsi:type="attribute:ColorDefinition">
+    <Transparency>255</Transparency>
+    <Red>255</Red>
+    <Green>255</Green>
+    <Blue>255</Blue>
+  </WallFill>
+  <FloorFill xsi:type="attribute:ColorDefinition">
+    <Transparency>255</Transparency>
+    <Red>255</Red>
+    <Green>255</Green>
+    <Blue>255</Blue>
+  </FloorFill>
   <Orientation>Horizontal</Orientation>
   <UnitSpacing>50.0</UnitSpacing>
   <Rotation>
@@ -1391,6 +1478,7 @@ order by CUSTOMERTOTAL]]></xml-property>
                                 </simple-property-list>
                             </structure>
                         </list-property>
+                        <property name="inheritColumns">true</property>
                         <property name="dataSet">Customer Sales</property>
                         <property name="height">250pt</property>
                         <property name="width">400pt</property>
@@ -1410,7 +1498,7 @@ order by CUSTOMERTOTAL]]></xml-property>
         </grid>
         <grid id="33">
             <property name="pageBreakBefore">auto</property>
-            <property name="width">100%</property>
+            <property name="width">7in</property>
             <column id="34"/>
             <row id="35">
                 <property name="height">0.25in</property>
@@ -1418,14 +1506,13 @@ order by CUSTOMERTOTAL]]></xml-property>
             </row>
             <row id="37">
                 <property name="height">0.1in</property>
-                <property name="style">BackgroundBlue</property>
-                <cell id="38">
-                    <property name="style">BackgroundBlue</property>
-                </cell>
+                <property name="style">special-detail</property>
+                <cell id="38"/>
             </row>
             <row id="39">
                 <cell id="40">
                     <text id="94">
+                        <property name="style">special-header</property>
                         <property name="fontFamily">sans-serif</property>
                         <property name="fontSize">16pt</property>
                         <property name="paddingTop">5pt</property>
@@ -1481,7 +1568,6 @@ order by CUSTOMERTOTAL]]></xml-property>
                         </column>
                         <header>
                             <row id="62">
-                                <property name="style">BackgroundYellow</property>
                                 <cell id="63">
                                     <label id="74">
                                         <property name="fontFamily">"SansSerif"</property>

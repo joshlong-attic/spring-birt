@@ -3,7 +3,7 @@
     <list-property name="configVars">
         <structure>
             <property name="name">__isdisplay__TopCount_87_0</property>
-            <property name="value">2</property>
+            <property name="value">5</property>
         </structure>
         <structure>
             <property name="name">__isdisplay__TopPercentage_88_1</property>
@@ -19,7 +19,7 @@
         </structure>
         <structure>
             <property name="name">TopCount_87_3</property>
-            <property name="value">2</property>
+            <property name="value">5</property>
         </structure>
         <structure>
             <property name="name">TopCount_87_type_</property>

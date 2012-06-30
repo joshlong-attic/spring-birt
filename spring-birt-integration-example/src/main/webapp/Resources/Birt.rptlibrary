@@ -1748,95 +1748,25 @@ from CLASSICMODELS.PRODUCTS]]></xml-property>
     </cubes>
     <themes>
         <theme name="defaultTheme" id="2">
-            <styles>
-                <style name="table-header" id="388">
-                    <property name="backgroundColor">#6078BF</property>
-                    <property name="fontFamily">"Arial"</property>
-                    <property name="fontSize">small</property>
-                    <property name="fontWeight">bold</property>
-                    <property name="color">#FFFFFF</property>
-                    <property name="paddingTop">0px</property>
-                    <property name="paddingLeft">0px</property>
-                    <property name="paddingBottom">0px</property>
-                    <property name="paddingRight">0px</property>
-                </style>
-                <style name="table-footer" id="389">
-                    <property name="backgroundColor">#6078BF</property>
-                    <property name="fontFamily">"Arial"</property>
-                    <property name="fontSize">small</property>
-                    <property name="fontWeight">bold</property>
-                    <property name="color">#FFFFFF</property>
-                    <property name="paddingTop">0px</property>
-                    <property name="paddingLeft">0px</property>
-                    <property name="paddingBottom">0px</property>
-                    <property name="paddingRight">0px</property>
-                </style>
-                <style name="table-detail" id="390">
-                    <property name="backgroundColor">#E6ECFF</property>
-                    <property name="fontFamily">"Arial"</property>
-                    <property name="fontSize">x-small</property>
-                    <property name="fontWeight">bold</property>
-                    <property name="color">#000080</property>
-                    <property name="paddingTop">0px</property>
-                    <property name="paddingLeft">0px</property>
-                    <property name="paddingBottom">0px</property>
-                    <property name="paddingRight">0px</property>
-                </style>
-                <style name="table-group-header-1" id="391">
-                    <property name="backgroundColor">#809FFF</property>
-                    <property name="fontFamily">"Arial"</property>
-                    <property name="fontSize">small</property>
-                    <property name="fontWeight">bold</property>
-                    <property name="color">#FFFFFF</property>
-                    <property name="paddingTop">0px</property>
-                    <property name="paddingLeft">0px</property>
-                    <property name="paddingBottom">0px</property>
-                    <property name="paddingRight">0px</property>
-                </style>
-                <style name="table-group-footer-1" id="392">
-                    <property name="backgroundColor">#809FFF</property>
-                    <property name="fontFamily">"Arial"</property>
-                    <property name="fontSize">small</property>
-                    <property name="fontWeight">bold</property>
-                    <property name="color">#FFFFFF</property>
-                    <property name="paddingTop">0px</property>
-                    <property name="paddingLeft">0px</property>
-                    <property name="paddingBottom">0px</property>
-                    <property name="paddingRight">0px</property>
-                </style>
-                <style name="special-header" id="393">
-                    <property name="backgroundColor">#6078BF</property>
-                    <property name="fontFamily">"Arial"</property>
-                    <property name="fontSize">medium</property>
-                    <property name="fontWeight">bold</property>
-                    <property name="color">#FFFFFF</property>
-                    <property name="paddingTop">0px</property>
-                    <property name="paddingLeft">0px</property>
-                    <property name="paddingBottom">0px</property>
-                    <property name="paddingRight">0px</property>
-                </style>
-            </styles>
-        </theme>
-        <theme name="cm" id="387">
             <list-property name="cssStyleSheets">
                 <structure>
-                    <property name="fileName">LinksPastelBlue.css</property>
+                    <property name="fileName">Spring.css</property>
                 </structure>
             </list-property>
         </theme>
     </themes>
     <components>
         <grid name="HistoricGrid" id="3">
-            <property name="borderBottomColor">#004080</property>
+            <property name="borderBottomColor">#C0C0C0</property>
             <property name="borderBottomStyle">solid</property>
             <property name="borderBottomWidth">thin</property>
-            <property name="borderLeftColor">#004080</property>
+            <property name="borderLeftColor">#C0C0C0</property>
             <property name="borderLeftStyle">solid</property>
             <property name="borderLeftWidth">thin</property>
-            <property name="borderRightColor">#004080</property>
+            <property name="borderRightColor">#C0C0C0</property>
             <property name="borderRightStyle">solid</property>
             <property name="borderRightWidth">thin</property>
-            <property name="borderTopColor">#004080</property>
+            <property name="borderTopColor">#C0C0C0</property>
             <property name="borderTopStyle">solid</property>
             <property name="borderTopWidth">thin</property>
             <property name="height">4in</property>
@@ -1846,11 +1776,10 @@ from CLASSICMODELS.PRODUCTS]]></xml-property>
             </column>
             <column id="5"/>
             <row id="6">
-                <property name="backgroundColor">#6078BF</property>
+                <property name="style">special-header</property>
                 <property name="fontFamily">"Arial"</property>
                 <property name="fontSize">medium</property>
                 <property name="fontWeight">bold</property>
-                <property name="color">#FFFFFF</property>
                 <property name="paddingTop">0px</property>
                 <property name="paddingLeft">0px</property>
                 <property name="paddingBottom">0px</property>
@@ -1871,18 +1800,6 @@ from CLASSICMODELS.PRODUCTS]]></xml-property>
             <row id="11">
                 <cell id="12">
                     <table id="13">
-                        <property name="borderBottomColor">#004080</property>
-                        <property name="borderBottomStyle">solid</property>
-                        <property name="borderBottomWidth">thin</property>
-                        <property name="borderLeftColor">#004080</property>
-                        <property name="borderLeftStyle">solid</property>
-                        <property name="borderLeftWidth">thin</property>
-                        <property name="borderRightColor">#004080</property>
-                        <property name="borderRightStyle">solid</property>
-                        <property name="borderRightWidth">thin</property>
-                        <property name="borderTopColor">#004080</property>
-                        <property name="borderTopStyle">solid</property>
-                        <property name="borderTopWidth">thin</property>
                         <property name="marginTop">0pt</property>
                         <property name="width">100%</property>
                         <property name="dataSet">hist</property>
@@ -2000,11 +1917,9 @@ from CLASSICMODELS.PRODUCTS]]></xml-property>
                         <column id="44"/>
                         <header>
                             <row id="14">
-                                <property name="backgroundColor">#6078BF</property>
                                 <property name="fontFamily">"Arial"</property>
                                 <property name="fontSize">small</property>
                                 <property name="fontWeight">bold</property>
-                                <property name="color">#FFFFFF</property>
                                 <property name="paddingTop">0px</property>
                                 <property name="paddingLeft">0px</property>
                                 <property name="paddingBottom">0px</property>
@@ -2041,11 +1956,9 @@ from CLASSICMODELS.PRODUCTS]]></xml-property>
                             <property name="pageBreakInside">auto</property>
                             <header>
                                 <row id="22">
-                                    <property name="backgroundColor">#809FFF</property>
                                     <property name="fontFamily">"Arial"</property>
                                     <property name="fontSize">small</property>
                                     <property name="fontWeight">bold</property>
-                                    <property name="color">#FFFFFF</property>
                                     <property name="paddingTop">0px</property>
                                     <property name="paddingLeft">0px</property>
                                     <property name="paddingBottom">0px</property>
@@ -2061,11 +1974,9 @@ from CLASSICMODELS.PRODUCTS]]></xml-property>
                             </header>
                             <footer>
                                 <row id="27">
-                                    <property name="backgroundColor">#809FFF</property>
                                     <property name="fontFamily">"Arial"</property>
                                     <property name="fontSize">small</property>
                                     <property name="fontWeight">bold</property>
-                                    <property name="color">#FFFFFF</property>
                                     <property name="paddingTop">0px</property>
                                     <property name="paddingLeft">0px</property>
                                     <property name="paddingBottom">0px</property>
@@ -2078,11 +1989,9 @@ from CLASSICMODELS.PRODUCTS]]></xml-property>
                         </group>
                         <detail>
                             <row id="31">
-                                <property name="backgroundColor">#E6ECFF</property>
                                 <property name="fontFamily">"Arial"</property>
                                 <property name="fontSize">x-small</property>
                                 <property name="fontWeight">bold</property>
-                                <property name="color">#000080</property>
                                 <property name="paddingTop">0px</property>
                                 <property name="paddingLeft">0px</property>
                                 <property name="paddingBottom">0px</property>
@@ -2230,11 +2139,9 @@ from CLASSICMODELS.PRODUCTS]]></xml-property>
                         </detail>
                         <footer>
                             <row id="38">
-                                <property name="backgroundColor">#6078BF</property>
                                 <property name="fontFamily">"Arial"</property>
                                 <property name="fontSize">small</property>
                                 <property name="fontWeight">bold</property>
-                                <property name="color">#FFFFFF</property>
                                 <property name="paddingTop">0px</property>
                                 <property name="paddingLeft">0px</property>
                                 <property name="paddingBottom">0px</property>
