@@ -33,15 +33,34 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 
         String resourceDirectory(ServletContext sc, HttpServletRequest request, String reportName);
 
+        String pathForDocument(ServletContext servletContext, HttpServletRequest r, String documentName) throws Throwable;
+        
+        
+
     }
 
+	public static final int RUNRENDERTASK = 0;
+	public static final int RUNTASK = 1;
+	public static final int RENDERTASK = 2;
+	public static final int DATAEXTRACTTASK = 3;
+
+	
+	
     private DataSource dataSource;
 
     private IReportEngine birtEngine;
+    
+    private int taskType = this.RUNRENDERTASK;
 
     private String reportNameRequestParameter = "reportName";
 
+    private String documentNameRequestParameter = "documentName";
+    
     private String imagesDirectory = "images";
+    
+    private String documentsDirectory = "";
+    
+    private String documentName = null;
 
     private String reportsDirectory = "";
 
@@ -83,7 +102,8 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
         Assert.hasText(this.requestEncoding, "the 'requestEncoding' must be set");
         Assert.hasText(this.reportFormatRequestParameter, "the 'reportFormatRequestParameter' must not be null");
         Assert.hasText(this.reportNameRequestParameter, "the 'reportNameRequestParameter' must not be null");
-
+        Assert.hasText(this.documentNameRequestParameter, "the 'documentNameRequestParameter' must not be null");
+        
         if (null == this.renderOption)
             this.renderOption = new RenderOption();
 
@@ -91,7 +111,7 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
             this.actionHandler = new SimpleRequestParameterActionHandler(this.reportNameRequestParameter, this.reportFormatRequestParameter);
 
         if (null == birtViewResourcePathCallback)
-            this.birtViewResourcePathCallback = new SimpleBirtViewResourcePathPathCallback(this.reportsDirectory, this.imagesDirectory, this.resourceDirectory);
+            this.birtViewResourcePathCallback = new SimpleBirtViewResourcePathPathCallback(this.reportsDirectory, this.imagesDirectory, this.resourceDirectory, this.documentsDirectory);
     }
 
     public void setRequestEncoding(String r) {
@@ -117,14 +137,30 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
     public void setReportNameRequestParameter(String rn) {
         this.reportNameRequestParameter = rn;
     }
-
+    
+    public void setDocumentName(String dn) {
+        this.documentName = dn;
+    }
+    
+    public void setDocumentNameRequestParameter(String dn) {
+        this.documentNameRequestParameter = dn;
+    }
     public void setImagesDirectory(String imagesDirectory) {
         this.imagesDirectory = imagesDirectory;
     }
+    
+    public void setDocumentsDirectory(String documentDirectory) {
+            this.documentsDirectory = documentDirectory;        
+        
+    }
+    public void setTaskType(int taskType) {
+        this.taskType = taskType;        
+    
+    }    
 
     public static class SimpleBirtViewResourcePathPathCallback implements BirtViewResourcePathCallback {
 
-        private String reportFolder, imagesFolder, resourceFolder;
+        private String reportFolder, imagesFolder, resourceFolder, documentsFolder;
 
         public String baseImageUrl(ServletContext sc, HttpServletRequest request, String reportName) throws Throwable {
             return request.getContextPath() + "/" + imagesFolder;
@@ -139,7 +175,12 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
         public String pathForReport(ServletContext sc, HttpServletRequest request, String reportName) throws Throwable {
             return sc.getRealPath(reportFolder) + reportName;
         }
+        
+        public String pathForDocument(ServletContext sc, HttpServletRequest request, String documentName) throws Throwable {
+            return sc.getRealPath(documentsFolder) + documentName;
+        }
 
+        
         public String imageDirectory(ServletContext sc, HttpServletRequest request, String reportName) {
             return sc.getRealPath(imagesFolder);
         }
@@ -148,10 +189,12 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
             return sc.getRealPath(resourceFolder);
         }
 
-        public SimpleBirtViewResourcePathPathCallback(String f, String i, String k) {
+        public SimpleBirtViewResourcePathPathCallback(String f, String i, String k, String m) {
             this.reportFolder = StringUtils.hasText(f) ? f : "";
             this.imagesFolder = StringUtils.hasText(i) ? i : "";
             this.resourceFolder = StringUtils.hasText(k) ? k : "";
+            this.documentsFolder = StringUtils.hasText(m) ? m : "";
+            
          }
 
     }
@@ -166,6 +209,22 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
         this.renderOption = renderOption;
     }
 
+    
+    public String getDefaultDocumentLocation(String reportName){
+    	String newDocument = "temp.rptdocument";
+    	String dDir = "";
+    	if( (this.documentsDirectory == null) || (this.documentsDirectory.length() == 0)){
+    		dDir = "documents";
+    	}else{
+    		dDir = this.documentsDirectory;
+    	}
+    	if( this.documentName == null ){
+    		newDocument = reportName.substring(reportName.lastIndexOf("/")+1);
+    		newDocument = newDocument.replaceAll("(?i).rptdesign", ".rptdocument");
+    	}
+    	return "/"+dDir+"/"+newDocument;
+    }
+    
     abstract protected RenderOption renderReport(Map<String, Object> map, HttpServletRequest request, HttpServletResponse response,
                                                  BirtViewResourcePathCallback resourcePathCallback, Map<String, Object> appContextValuesMap,
                                                  String reportName, String format, IRenderOption options) throws Throwable;
@@ -173,11 +232,19 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
     @SuppressWarnings("unchecked")
     protected void renderMergedOutputModel(Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
         FileInputStream fis = null;
+        IReportRunnable runnable = null;
+        IReportDocument document = null;
         try {
 
             String requestReportNameParameter = request.getParameter(this.reportNameRequestParameter);
+            String requestDocumentNameParameter = request.getParameter(this.documentNameRequestParameter);
+            
             String reportName = StringUtils.hasText(requestReportNameParameter) ?
                     requestReportNameParameter : getUrl();
+            String documentName = StringUtils.hasText(requestDocumentNameParameter) ?
+                    requestDocumentNameParameter : getDefaultDocumentLocation(reportName);
+
+            
             String format = request.getParameter(this.reportFormatRequestParameter);
             ServletContext sc = request.getServletContext(); /// avoid creating an HTTP session if possible.
             if (format == null) {
@@ -186,14 +253,8 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 
             Map<String, Object> mapOfOptions = new HashMap<String, Object>();
             mapOfOptions.put(IModuleOption.RESOURCE_FOLDER_KEY, birtViewResourcePathCallback.resourceDirectory(sc, request, reportName));
-            mapOfOptions.put(IModuleOption.PARSER_SEMANTIC_CHECK_KEY, Boolean.FALSE);
-
-            String pathForReport = birtViewResourcePathCallback.pathForReport(sc, request, reportName);
-            fis = new FileInputStream(pathForReport);
-            IReportRunnable runnable = birtEngine.openReportDesign(reportName, fis, mapOfOptions);
-            IRunAndRenderTask runAndRenderTask = birtEngine.createRunAndRenderTask(runnable);
-            runAndRenderTask.setParameterValues(discoverAndSetParameters(runnable, request));
-
+            mapOfOptions.put(IModuleOption.PARSER_SEMANTIC_CHECK_KEY, Boolean.FALSE);    
+  
             // set content type
             String contentType = birtEngine.getMIMEType(format);
             response.setContentType(contentType);
@@ -207,70 +268,88 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 
                 if (this.closeDataSourceConnection)
                     appContextMap.put(IConnectionFactory.CLOSE_PASS_IN_CONNECTION, Boolean.TRUE);
+            }            
+            
+
+
+            IEngineTask task = null;
+            if( this.taskType == AbstractSingleFormatBirtView.RUNTASK || 
+            		this.taskType == AbstractSingleFormatBirtView.RUNRENDERTASK ){
+           
+            String pathForReport = birtViewResourcePathCallback.pathForReport(sc, request, reportName);
+            fis = new FileInputStream(pathForReport);
+            runnable = birtEngine.openReportDesign(reportName, fis, mapOfOptions);
+           
             }
-
-            IRenderOption options = null == this.renderOption ? new RenderOption() : this.renderOption;
-            options.setActionHandler(actionHandler);
-
-            IRenderOption returnedRenderOptions = renderReport(map, request, response, this.birtViewResourcePathCallback,
-                    appContextMap, reportName, format, options);
-
-            for (String k : appContextMap.keySet())
-                runAndRenderTask.getAppContext().put(k, appContextMap.get(k));
-
-            runAndRenderTask.setRenderOption(returnedRenderOptions);
-
-            runAndRenderTask.run();
-            runAndRenderTask.close();
-
-
-            /* if (format.equalsIgnoreCase("html")) {
-                HTMLRenderOption htmlOptions = new HTMLRenderOption(options);
-                htmlOptions.setOutputFormat("html");
-                htmlOptions.setOutputStream(response.getOutputStream());
-                htmlOptions.setImageHandler(new HTMLServerImageHandler());
-                htmlOptions.setBaseImageURL(birtViewResourcePathCallback.baseImageUrl(sc, request, reportName));
-                htmlOptions.setImageDirectory(birtViewResourcePathCallback.imageDirectory(sc, request, reportName));
-                htmlOptions.setBaseURL(birtViewResourcePathCallback.baseUrl(sc, request, reportName));
-
-                runAndRenderTask.setRenderOption(htmlOptions);
-
-            } else if (format.equalsIgnoreCase("pdf")) {
-                PDFRenderOption pdfOptions = new PDFRenderOption(options);
-                pdfOptions.setOutputFormat("pdf");
-                pdfOptions.setOption(IPDFRenderOption.PAGE_OVERFLOW, IPDFRenderOption.FIT_TO_PAGE_SIZE);
-                pdfOptions.setOutputStream(response.getOutputStream());
-                runAndRenderTask.setRenderOption(pdfOptions);
-            } else {
-                String att = "download." + format;
-                String uReportName = reportName.toUpperCase();
-                String rptDesignSuffix = ".RPTDESIGN";
-                if (uReportName.endsWith(rptDesignSuffix)) {
-                    att = uReportName.replace(rptDesignSuffix, "." + format);
-                }
-                // Create file
-                FileWriter fstream = new FileWriter("c:/test/out.txt");
-                BufferedWriter out = new BufferedWriter(fstream);
-                out.write("Hello Java " + format + "--" + birtEngine.getMIMEType(format));
-                out.close();
-
-                response.setHeader("Content-Disposition", "attachment; filename=\"" + att + "\"");
-                options.setOutputStream(response.getOutputStream());
-                options.setOutputFormat(format);
-                runAndRenderTask.setRenderOption(options);
-            }*/
-
-
+            if( this.taskType == AbstractSingleFormatBirtView.RENDERTASK /* ||
+            		this.taskType == AbstractSingleFormatBirtView.DATAEXTRACTTASK*/){
+                String pathForDocument = birtViewResourcePathCallback.pathForDocument(sc, request, documentName);
+            	document = birtEngine.openReportDocument(documentName, pathForDocument, mapOfOptions);
+            }
+            switch( this.taskType){
+            case AbstractSingleFormatBirtView.RUNTASK:
+            	if( runnable != null ){
+            		task = birtEngine.createRunTask(runnable);
+            		task.setParameterValues(discoverAndSetParameters(runnable, request));
+            		IRunTask runTask = (IRunTask) task;
+ 					for (String k : appContextMap.keySet())
+                        runTask.getAppContext().put(k, appContextMap.get(k));
+ 					String pathForDocument = birtViewResourcePathCallback.pathForDocument(sc, request, documentName);
+                    runTask.run(pathForDocument);
+                    runTask.close();
+                    response.getWriter().write("Document Creation Complete");                   
+            	}
+            	break;
+            case AbstractSingleFormatBirtView.RENDERTASK: 
+            	if( document != null){
+            		task = birtEngine.createRenderTask(document);
+            		IRenderTask renderTask = (IRenderTask) task;
+                    IRenderOption options = null == this.renderOption ? new RenderOption() : this.renderOption;
+                    options.setActionHandler(actionHandler);
+                    IRenderOption returnedRenderOptions = renderReport(map, request, response, this.birtViewResourcePathCallback,
+                            appContextMap, reportName, format, options);
+					for (String k : appContextMap.keySet())
+                        renderTask.getAppContext().put(k, appContextMap.get(k));
+                    renderTask.setRenderOption(returnedRenderOptions);
+                    renderTask.render();
+                    renderTask.close();
+                    document.close();
+            	}
+            	break;
+            //case AbstractSingleFormatBirtView.DATAEXTRACTTASK: 
+            //	if( document != null){
+            //		task = birtEngine.createDataExtractionTask(document);
+            //	}            	
+            //	break;
+            case AbstractSingleFormatBirtView.RUNRENDERTASK:
+            default:
+            	if( runnable != null){
+            		task = birtEngine.createRunAndRenderTask(runnable);
+            		task.setParameterValues(discoverAndSetParameters(runnable, request));
+            		IRunAndRenderTask runAndRenderTask = (IRunAndRenderTask) task;
+                    IRenderOption options = null == this.renderOption ? new RenderOption() : this.renderOption;
+                    options.setActionHandler(actionHandler);
+                    IRenderOption returnedRenderOptions = renderReport(map, request, response, this.birtViewResourcePathCallback,
+                            appContextMap, reportName, format, options);
+					for (String k : appContextMap.keySet())
+                        runAndRenderTask.getAppContext().put(k, appContextMap.get(k));
+                    runAndRenderTask.setRenderOption(returnedRenderOptions);
+                    runAndRenderTask.run();
+                    runAndRenderTask.close();           		    		
+            	}
+            	break;
+            	
+            
+            }            
+            
         } catch (Throwable th) {
             throw new RuntimeException(th); // nothing useful to do here
         } finally {
-            //IConnectionFactory.PASS_IN_CONNECTION
-//             IConnectionFactory.CLOSE_PASS_IN_CONNECTION
-            // todo OdaJDBCDriverPassInConnection
-            //reportContext.getAppContext().put("OdaJDBCDriverPassInConnectionCloseAfterUse", true);
-            // todo task.getAppContext().put("OdaJDBCDriverPassInConnectionCloseAfterUse", true);
             if (null != fis)
                 IOUtils.closeQuietly(fis);
+            if( null != document)
+                document.close();
+            	
         }
     }
 

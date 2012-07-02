@@ -1,5 +1,6 @@
 package org.eclipse.birt.spring.example;
 
+import org.eclipse.birt.spring.core.AbstractSingleFormatBirtView;
 import org.eclipse.birt.spring.core.BirtEngineFactory;
 import org.eclipse.birt.spring.core.BirtViewResolver;
 import org.eclipse.birt.spring.core.HtmlSingleFormatBirtView;
@@ -63,7 +64,8 @@ public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
         BirtViewResolver bvr = new BirtViewResolver();
         bvr.setBirtEngine( this.engine().getObject());
         bvr.setViewClass( HtmlSingleFormatBirtView.class);
-        bvr.setDataSource(this.birtDataServiceConfiguration.dataSource()) ;
+        bvr.setDataSource(this.birtDataServiceConfiguration.dataSource());
+        bvr.setTaskType(AbstractSingleFormatBirtView.RUNTASK);
         bvr.setPrefix("/Reports/");
         return bvr;
     }

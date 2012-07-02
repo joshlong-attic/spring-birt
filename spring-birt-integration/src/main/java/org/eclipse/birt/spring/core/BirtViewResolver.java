@@ -15,8 +15,9 @@ import javax.sql.DataSource;
  */
 public class BirtViewResolver extends UrlBasedViewResolver {
 
-    private IReportEngine birtEngine ;
+    private IReportEngine birtEngine;
     private DataSource dataSource;
+    private int taskType;
 
     public BirtViewResolver(){
         setViewClass(AbstractSingleFormatBirtView.class);
@@ -31,12 +32,16 @@ public class BirtViewResolver extends UrlBasedViewResolver {
         this.dataSource = dataSource;
     }
 
+    public void setTaskType(int taskType){
+        this.taskType = taskType;
+    }
 
     @Override
     protected AbstractUrlBasedView buildView(String viewName) throws Exception {
         AbstractSingleFormatBirtView view = (AbstractSingleFormatBirtView) super.buildView(viewName);
         view.setDataSource( this.dataSource);
         view.setBirtEngine(this.birtEngine);
+        view.setTaskType(this.taskType);
         return view;
     }
 
