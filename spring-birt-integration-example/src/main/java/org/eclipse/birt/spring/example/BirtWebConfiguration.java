@@ -65,6 +65,7 @@ public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
         bvr.setBirtEngine( this.engine().getObject());
         bvr.setViewClass( HtmlSingleFormatBirtView.class);
         bvr.setDataSource(this.birtDataServiceConfiguration.dataSource());
+		//set task type
         bvr.setTaskType(AbstractSingleFormatBirtView.RUNTASK);
         bvr.setPrefix("/Reports/");
         return bvr;
