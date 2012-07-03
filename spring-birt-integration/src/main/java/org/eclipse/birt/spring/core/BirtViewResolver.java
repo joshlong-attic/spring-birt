@@ -14,10 +14,13 @@ import javax.sql.DataSource;
  * @author Jason Weathersby
  */
 public class BirtViewResolver extends UrlBasedViewResolver {
+	
 
+	
     private IReportEngine birtEngine;
     private DataSource dataSource;
     private int taskType;
+    
 
     public BirtViewResolver(){
         setViewClass(AbstractSingleFormatBirtView.class);
@@ -46,12 +49,6 @@ public class BirtViewResolver extends UrlBasedViewResolver {
     }
 
 
-    /*
-    @Override
-    protected AbstractUrlBasedView buildView(String viewName) throws Exception {
-        return super.buildView(viewName);    //To change body of overridden methods use File | Settings | File Templates.
-    }
-*/
     @Override
     protected Class requiredViewClass() {
         return AbstractSingleFormatBirtView.class;

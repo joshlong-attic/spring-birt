@@ -42,9 +42,7 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 	}
 
 	public static final int RUNRENDERTASK = 0;
-	public static final int RUNTASK = 1;
-	public static final int RENDERTASK = 2;
-	public static final int DATAEXTRACTTASK = 3;
+	public static final int RUNTHENRENDERTASK = 1;
 
 
 
@@ -79,22 +77,139 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 	protected IHTMLActionHandler actionHandler;
 
 	private String requestEncoding = "UTF-8";
+	
+	private String renderRange = null;
 
-	public void setNullParameterName(String nullParameterName) {
-		isNullParameterName = nullParameterName;
-	}
 
+	/**
+	 * This method allows you to set the implementation of the Resource callback class for implementing
+	 * location logic for resource folder, image folder, reports folder, documents folder, baseURL and baseImageURL
+	 */
 	public void setBirtViewResourcePathCallback(BirtViewResourcePathCallback birtViewResourcePathCallback) {
 		this.birtViewResourcePathCallback = birtViewResourcePathCallback;
 	}
 
 	/**
-	 * Data source to stick in the report's app context.
+	 * Data source to put in the report's app context.
 	 */
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
+    /**
+     * This method allows you to set a report parameter to a null value
+     */
+	public void setNullParameterName(String nullParameterName) {
+		isNullParameterName = nullParameterName;
+	}
+	
+	/**
+	 * Method to set encoding for the request
+	 */
+	public void setRequestEncoding(String r) {
+		this.requestEncoding = r;
+	}
 
+	/**
+	 * Set the instance of the BIRT Engine
+	 */
+	public void setBirtEngine(IReportEngine birtEngine) {
+		this.birtEngine = birtEngine;
+	}
+
+	/**
+	 * Set the resource directory that contains birt libraries, images, style sheets for the reports
+	 * by default the Resources folder will be checked
+	 */
+	public void setResourceDirectory(String resourceDirectory) {
+		this.resourceDirectory = resourceDirectory;
+	}
+
+	/**
+	 * Set the folder within the web app that will contain reports
+	 */
+	public void setReportsDirectory(String reportsDirectory) {
+		this.reportsDirectory = reportsDirectory;
+	}
+
+	/**
+	 * by default this parameter is set to reportFomat (eg reportFormat=html), but using this method
+	 * the request parameter can be changed.
+	 */
+	public void setReportFormatRequestParameter(String rf) {
+		this.reportFormatRequestParameter = rf;
+	}
+	/**
+	 * by default this parameter is set to reportName (eg reportName=TopNPercent.rptdesign), but using this method
+	 * the request parameter can be changed.
+	 */
+	public void setReportNameRequestParameter(String rn) {
+		this.reportNameRequestParameter = rn;
+	}
+
+	/**
+	 * by default this parameter is set to nameofreport.rptdocument but using this method
+	 * the name of the rptdocument can be set
+	 */
+	public void setDocumentName(String dn) {
+		this.documentName = dn;
+	}
+
+	/**
+	 * by default this parameter is set to documentName (eg documentName=TopNPercent.rptdocument but using this method
+	 * the name of the requestor parameter can be change
+	 */	
+	public void setDocumentNameRequestParameter(String dn) {
+		this.documentNameRequestParameter = dn;
+	}
+	/**
+	 * Set the images directory that engine will use to generate temporary images for the reports
+	 * by default the images directory will be used
+	 */
+	public void setImagesDirectory(String imagesDirectory) {
+		this.imagesDirectory = imagesDirectory;
+	}
+	/**
+	 * Set the documents directory that engine will use to generate temporary rptdocuments for the reports
+	 * by default the documents directory will be used
+	 */
+	public void setDocumentsDirectory(String documentDirectory) {
+		this.documentsDirectory = documentDirectory;        
+
+	}
+	/**
+	 * Sets the engine to either runandrender a report using one task or 
+	 * to generate a rptdocument first with a runtask and then followed by a render task
+	 * default operation is to use a runandrender task
+	 */
+	public void setTaskType(int taskType) {
+		this.taskType = taskType;        
+
+	} 
+	/**
+	 * Set the page range string for reports that use a run then render task.
+	 * eg 1-3, 1,3,4
+	 */
+	public void setRenderRange(String renderRange) {
+		this.renderRange = renderRange;        
+
+	}
+	/**
+	 * sets the Action Handler instance to be used when generating html reports.
+	 * SimpleRequestParameterActionHandler is used by default.
+	 * 
+	 */
+	public void setHtmlActionHandler(IHTMLActionHandler actionHandler) {
+		this.actionHandler = actionHandler;
+	}
+
+	/**
+	 * This method allows setting the render options for rendering reports
+	 * @param renderOption
+	 */
+	public void setRenderOption(IRenderOption renderOption) {
+		this.renderOption = renderOption;
+	}
+	
 	/**
 	 * Perform common validation on the state of this object
 	 *
@@ -116,50 +231,7 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 			this.birtViewResourcePathCallback = new SimpleBirtViewResourcePathPathCallback(this.reportsDirectory, this.imagesDirectory, this.resourceDirectory, this.documentsDirectory);
 	}
 
-	public void setRequestEncoding(String r) {
-		this.requestEncoding = r;
-	}
-
-	public void setBirtEngine(IReportEngine birtEngine) {
-		this.birtEngine = birtEngine;
-	}
-
-	public void setResourceDirectory(String resourceDirectory) {
-		this.resourceDirectory = resourceDirectory;
-	}
-
-	public void setReportsDirectory(String reportsDirectory) {
-		this.reportsDirectory = reportsDirectory;
-	}
-
-	public void setReportFormatRequestParameter(String rf) {
-		this.reportFormatRequestParameter = rf;
-	}
-
-	public void setReportNameRequestParameter(String rn) {
-		this.reportNameRequestParameter = rn;
-	}
-
-	public void setDocumentName(String dn) {
-		this.documentName = dn;
-	}
-
-	public void setDocumentNameRequestParameter(String dn) {
-		this.documentNameRequestParameter = dn;
-	}
-	public void setImagesDirectory(String imagesDirectory) {
-		this.imagesDirectory = imagesDirectory;
-	}
-
-	public void setDocumentsDirectory(String documentDirectory) {
-		this.documentsDirectory = documentDirectory;        
-
-	}
-	public void setTaskType(int taskType) {
-		this.taskType = taskType;        
-
-	}    
-
+ 
 	public static class SimpleBirtViewResourcePathPathCallback implements BirtViewResourcePathCallback {
 
 		private String reportFolder, imagesFolder, resourceFolder, documentsFolder;
@@ -201,18 +273,7 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 
 	}
 
-
-	public void setHtmlActionHandler(IHTMLActionHandler actionHandler) {
-		this.actionHandler = actionHandler;
-	}
-
-
-	public void setRenderOption(IRenderOption renderOption) {
-		this.renderOption = renderOption;
-	}
-
-
-	public String getDefaultDocumentLocation(String reportName){
+	private String getDefaultDocumentLocation(String reportName){
 		String newDocument = "temp.rptdocument";
 		String dDir = "";
 		if( (this.documentsDirectory == null) || (this.documentsDirectory.length() == 0)){
@@ -242,7 +303,7 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 			String requestDocumentNameParameter = request.getParameter(this.documentNameRequestParameter);
 
 			String reportName = StringUtils.hasText(requestReportNameParameter) ?
-					requestReportNameParameter : getUrl();
+					"/" +this.reportsDirectory + "/" +requestReportNameParameter : getUrl();
 			String documentName = StringUtils.hasText(requestDocumentNameParameter) ?
 					requestDocumentNameParameter : getDefaultDocumentLocation(reportName);
 
@@ -275,27 +336,26 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 
 
 			IEngineTask task = null;
-			if( this.taskType == AbstractSingleFormatBirtView.RUNTASK || 
-					this.taskType == AbstractSingleFormatBirtView.RUNRENDERTASK ){
+			String pathForReport = birtViewResourcePathCallback.pathForReport(sc, request, reportName);
+			fis = new FileInputStream(pathForReport);
+			runnable = birtEngine.openReportDesign(reportName, fis, mapOfOptions);
 
-				String pathForReport = birtViewResourcePathCallback.pathForReport(sc, request, reportName);
-				fis = new FileInputStream(pathForReport);
-				runnable = birtEngine.openReportDesign(reportName, fis, mapOfOptions);
-
-			}
-			if( this.taskType == AbstractSingleFormatBirtView.RENDERTASK /* ||
-            		this.taskType == AbstractSingleFormatBirtView.DATAEXTRACTTASK*/){
-				String pathForDocument = birtViewResourcePathCallback.pathForDocument(sc, request, documentName);
-				File file=new File(pathForDocument);
-				boolean exists = file.exists();
-				if (!exists) {
-					response.getWriter().write("Report Document Does Not Exsits (Use Run Task): " + pathForDocument); 
-					return;
-				}
-				document = birtEngine.openReportDocument(documentName, pathForDocument, mapOfOptions);
-			}
-			switch( this.taskType){
-			case AbstractSingleFormatBirtView.RUNTASK:
+			if( runnable != null && this.taskType == AbstractSingleFormatBirtView.RUNRENDERTASK){
+				task = birtEngine.createRunAndRenderTask(runnable);
+				task.setParameterValues(discoverAndSetParameters(runnable, request));
+				IRunAndRenderTask runAndRenderTask = (IRunAndRenderTask) task;
+				IRenderOption options = null == this.renderOption ? new RenderOption() : this.renderOption;
+				options.setActionHandler(actionHandler);
+				IRenderOption returnedRenderOptions = renderReport(map, request, response, this.birtViewResourcePathCallback,
+						appContextMap, reportName, format, options);
+				for (String k : appContextMap.keySet())
+					runAndRenderTask.getAppContext().put(k, appContextMap.get(k));
+				runAndRenderTask.setRenderOption(returnedRenderOptions);
+				runAndRenderTask.run();
+				runAndRenderTask.close();           		    		
+			}else{
+				
+			    //Run then Render
 				if( runnable != null ){
 					task = birtEngine.createRunTask(runnable);
 					task.setParameterValues(discoverAndSetParameters(runnable, request));
@@ -305,17 +365,7 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 					String pathForDocument = birtViewResourcePathCallback.pathForDocument(sc, request, documentName);
 					runTask.run(pathForDocument);
 					runTask.close();
-					File file=new File(pathForDocument);
-					boolean exists = file.exists();
-					if (!exists) {
-						response.getWriter().write("Failed To Create Report Document: " + pathForDocument); 
-					}else{
-						response.getWriter().write("Report Document Creation Complete: " +pathForDocument);                   
-					}
-				}
-				break;
-			case AbstractSingleFormatBirtView.RENDERTASK: 
-				if( document != null){
+					document = birtEngine.openReportDocument(documentName, pathForDocument, mapOfOptions);
 					task = birtEngine.createRenderTask(document);
 					IRenderTask renderTask = (IRenderTask) task;
 					IRenderOption options = null == this.renderOption ? new RenderOption() : this.renderOption;
@@ -325,36 +375,15 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 					for (String k : appContextMap.keySet())
 						renderTask.getAppContext().put(k, appContextMap.get(k));
 					renderTask.setRenderOption(returnedRenderOptions);
+					if( renderRange == null){
+						renderTask.setPageRange(renderRange);
+					}
 					renderTask.render();
 					renderTask.close();
 					document.close();
 				}
-				break;
-				//case AbstractSingleFormatBirtView.DATAEXTRACTTASK: 
-					//	if( document != null){
-						//		task = birtEngine.createDataExtractionTask(document);
-						//	}            	
-					//	break;
-			case AbstractSingleFormatBirtView.RUNRENDERTASK:
-			default:
-				if( runnable != null){
-					task = birtEngine.createRunAndRenderTask(runnable);
-					task.setParameterValues(discoverAndSetParameters(runnable, request));
-					IRunAndRenderTask runAndRenderTask = (IRunAndRenderTask) task;
-					IRenderOption options = null == this.renderOption ? new RenderOption() : this.renderOption;
-					options.setActionHandler(actionHandler);
-					IRenderOption returnedRenderOptions = renderReport(map, request, response, this.birtViewResourcePathCallback,
-							appContextMap, reportName, format, options);
-					for (String k : appContextMap.keySet())
-						runAndRenderTask.getAppContext().put(k, appContextMap.get(k));
-					runAndRenderTask.setRenderOption(returnedRenderOptions);
-					runAndRenderTask.run();
-					runAndRenderTask.close();           		    		
-				}
-				break;
-
-
-			}            
+			}
+ 
 
 		} catch (Throwable th) {
 			throw new RuntimeException(th); // nothing useful to do here

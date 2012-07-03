@@ -4,6 +4,7 @@ import org.eclipse.birt.spring.core.AbstractSingleFormatBirtView;
 import org.eclipse.birt.spring.core.BirtEngineFactory;
 import org.eclipse.birt.spring.core.BirtViewResolver;
 import org.eclipse.birt.spring.core.HtmlSingleFormatBirtView;
+import org.eclipse.birt.spring.core.MultiFormatBirtView;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +28,7 @@ import javax.inject.Inject;
 @Configuration
 public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
 
-    static private final String BIRT_HTML_VIEW = "htmlBirt";
+    static private final String BIRT_MULTI_VIEW = "multiBirt";
 
     @Inject
     private BirtDataServiceConfiguration birtDataServiceConfiguration;
@@ -40,24 +41,14 @@ public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
         registry.addViewController("/masterreport");
         registry.addViewController("/detail");
         registry.addViewController("/ProductLines");
-        registry.addViewController("/SubReports");
-                
-        
-//        registry.addViewController("/reports").setViewName(BIRT_HTML_VIEW);
+        registry.addViewController("/SubReports");                
+
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("images/*").addResourceLocations("/images/");
     }
-
-  /*  @Bean(name = BIRT_HTML_VIEW)
-    public HtmlSingleFormatBirtView htmlBirt() throws Exception {
-        HtmlSingleFormatBirtView htmlSingleFormatBirtView = new HtmlSingleFormatBirtView();
-        htmlSingleFormatBirtView.setBirtEngine(this.engine().getObject());
-        htmlSingleFormatBirtView.setDataSource(birtDataServiceConfiguration.dataSource());
-        return htmlSingleFormatBirtView;
-    }*/
 
     @Bean
     public BirtViewResolver birtViewResolver () throws Exception {
@@ -66,7 +57,7 @@ public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
         bvr.setViewClass( HtmlSingleFormatBirtView.class);
         bvr.setDataSource(this.birtDataServiceConfiguration.dataSource());
 		//set task type
-        bvr.setTaskType(AbstractSingleFormatBirtView.RUNRENDERTASK);
+        bvr.setTaskType(HtmlSingleFormatBirtView.RUNRENDERTASK);
         bvr.setPrefix("/Reports/");
         return bvr;
     }
