@@ -26,4 +26,11 @@ DATABASE
  mysqlimport --lines-terminated-by='\r\n' --fields-terminated-by=, --fields-enclosed-by='"' -uroot --local classicmodels datafiles/OrderDetails.txt
  mysqlimport --lines-terminated-by='\r\n' --fields-terminated-by=, --fields-enclosed-by='"' -uroot --local classicmodels datafiles/Customers.txt
  mysqlimport --lines-terminated-by='\r\n' --fields-terminated-by=, --fields-enclosed-by='"' -uroot --local classicmodels datafiles/Employees.txt
+ 
+ or try:
+ 
+ mysql classicmodels --local_infile=1 -uroot -p < load_classicmodels.sql
+ if you use this approach the paths may need to be changed inload_classicmodels.sql to something similar to:
+ LOAD DATA LOCAL INFILE 'datafiles/customers.txt' INTO TABLE Customers
+          FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n';
 
