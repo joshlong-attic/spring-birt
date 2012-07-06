@@ -80,6 +80,7 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 	
 	private String renderRange = null;
 
+	private Map<String, Object> reportParameters = null;
 
 	/**
 	 * This method allows you to set the implementation of the Resource callback class for implementing
@@ -101,6 +102,15 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 	public void setNullParameterName(String nullParameterName) {
 		isNullParameterName = nullParameterName;
 	}
+	
+	/**
+	 * Method to set report Parameters, defaults form the URL
+	 */
+	public void setReportParameters(Map<String, Object> reportParameters) {
+		this.reportParameters = reportParameters;
+	}
+	
+	
 	
 	/**
 	 * Method to set encoding for the request
@@ -293,7 +303,7 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 			String reportName, String format, IRenderOption options) throws Throwable;
 
 	@SuppressWarnings("unchecked")
-	protected void renderMergedOutputModel(Map map, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	protected void renderMergedOutputModel(Map<String, Object> map, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		FileInputStream fis = null;
 		IReportRunnable runnable = null;
 		IReportDocument document = null;
@@ -403,6 +413,7 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 	}
 
 	private Map<String, Object> discoverAndSetParameters(IReportRunnable report, HttpServletRequest request) throws Throwable {
+		
 		HashMap<String, Object> parms = new HashMap<String, Object>();
 		IGetParameterDefinitionTask task = birtEngine.createGetParameterDefinitionTask(report);
 		@SuppressWarnings("unchecked")
@@ -410,8 +421,13 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 		for (IParameterDefnBase param : params) {
 			Assert.isInstanceOf(IScalarParameterDefn.class, param, "the parameter must be assignable to " + IScalarParameterDefn.class.getName());
 			IScalarParameterDefn scalar = (IScalarParameterDefn) param;
-			if (StringUtils.hasText(getParameter(request, param.getName())))
+			if( this.reportParameters != null && this.reportParameters.get(param.getName()) != null){
+				String format = scalar.getDisplayFormat();
+				ReportParameterConverter converter = new ReportParameterConverter(format, request.getLocale());
+				parms.put(param.getName(), converter.parse((String)this.reportParameters.get(param.getName()), scalar.getDataType()));
+			}else if (StringUtils.hasText(getParameter(request, param.getName()))){
 				parms.put(param.getName(), getParamValueObject(request, scalar));
+			}
 		}
 		task.close();
 		return parms;

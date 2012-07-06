@@ -1,5 +1,7 @@
 package org.eclipse.birt.spring.example;
 
+import java.util.HashMap;
+
 import org.eclipse.birt.spring.core.AbstractSingleFormatBirtView;
 import org.eclipse.birt.spring.core.BirtEngineFactory;
 import org.eclipse.birt.spring.core.BirtViewResolver;
@@ -55,9 +57,18 @@ public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
         BirtViewResolver bvr = new BirtViewResolver();
         bvr.setBirtEngine( this.engine().getObject());
         bvr.setViewClass( HtmlSingleFormatBirtView.class);
+        //Supply JDBC Datasource for BIRT Engine to use
         bvr.setDataSource(this.birtDataServiceConfiguration.dataSource());
 		//set task type
+        //HtmlSingleFormatBirtView.RUNRENDERTASK
+        //HtmlSingleFormatBirtView.RUNTHENRENDERTASK
         bvr.setTaskType(HtmlSingleFormatBirtView.RUNRENDERTASK);
+        //set report Parameters
+        //If none set the URL will be examined, else default parameters will be used.
+        HashMap<String, Object> parms = new HashMap<String, Object>();
+        parms.put("TopCount", "7");
+        parms.put("TopPercentage", "15");
+        bvr.setReportParameters(parms);
         bvr.setPrefix("/Reports/");
         return bvr;
     }

@@ -1,5 +1,7 @@
 package org.eclipse.birt.spring.core;
 
+import java.util.Map;
+
 import org.eclipse.birt.report.engine.api.IReportEngine;
 import org.springframework.web.servlet.view.AbstractUrlBasedView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
@@ -20,6 +22,7 @@ public class BirtViewResolver extends UrlBasedViewResolver {
     private IReportEngine birtEngine;
     private DataSource dataSource;
     private int taskType;
+    private Map reportParameters = null;
     
 
     public BirtViewResolver(){
@@ -38,13 +41,15 @@ public class BirtViewResolver extends UrlBasedViewResolver {
     public void setTaskType(int taskType){
         this.taskType = taskType;
     }
-
+    public void setReportParameters(Map reportParameters){
+        this.reportParameters = reportParameters;
+    }
     @Override
     protected AbstractUrlBasedView buildView(String viewName) throws Exception {
         AbstractSingleFormatBirtView view = (AbstractSingleFormatBirtView) super.buildView(viewName);
         view.setDataSource( this.dataSource);
         view.setBirtEngine(this.birtEngine);
-        view.setTaskType(this.taskType);
+        view.setReportParameters(this.reportParameters);
         return view;
     }
 
