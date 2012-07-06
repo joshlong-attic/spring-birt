@@ -30,7 +30,6 @@ import javax.inject.Inject;
 @Configuration
 public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
 
-    static private final String BIRT_MULTI_VIEW = "multiBirt";
 
     @Inject
     private BirtDataServiceConfiguration birtDataServiceConfiguration;
@@ -41,10 +40,8 @@ public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
         registry.addViewController("/SampleSpring");
         registry.addViewController("/DashBoard");
         registry.addViewController("/masterreport");
-        registry.addViewController("/detail");
         registry.addViewController("/ProductLines");
-        registry.addViewController("/SubReports");                
-
+        registry.addViewController("/SubReports");
     }
 
     @Override
@@ -52,32 +49,41 @@ public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("images/*").addResourceLocations("/images/");
     }
 
-    @Bean
-    public BirtViewResolver birtViewResolver () throws Exception {
-        BirtViewResolver bvr = new BirtViewResolver();
-        bvr.setBirtEngine( this.engine().getObject());
-        bvr.setViewClass( HtmlSingleFormatBirtView.class);
-        //Supply JDBC Datasource for BIRT Engine to use
-        bvr.setDataSource(this.birtDataServiceConfiguration.dataSource());
-		//set task type
-        //HtmlSingleFormatBirtView.RUNRENDERTASK
-        //HtmlSingleFormatBirtView.RUNTHENRENDERTASK
-        bvr.setTaskType(HtmlSingleFormatBirtView.RUNRENDERTASK);
-        //set report Parameters
-        //If none set the URL will be examined, else default parameters will be used.
+    /*
         HashMap<String, Object> parms = new HashMap<String, Object>();
         parms.put("TopCount", "7");
         parms.put("TopPercentage", "15");
         bvr.setReportParameters(parms);
-        bvr.setPrefix("/Reports/");
+    */
+
+    @Bean      // this should always be #2 in the resolution chain!
+    public BirtViewResolver birtViewResolver() throws Exception {
+        BirtViewResolver bvr = new BirtViewResolver();
+        bvr.setBirtEngine(this.engine().getObject());
+        bvr.setViewClass(HtmlSingleFormatBirtView.class);
+        bvr.setDataSource(this.birtDataServiceConfiguration.dataSource());
+        bvr.setReportsDirectory("Reports");
+        bvr.setOrder(2);
         return bvr;
     }
 
-  /*  @Bean
-    public ViewResolver beanNameResolver() {
-        return new BeanNameViewResolver();
+    @Bean(name = "orderDetails")
+    public AbstractSingleFormatBirtView orderDetailsView() throws Throwable {
+        HtmlSingleFormatBirtView abstractSingleFormatBirtView = new HtmlSingleFormatBirtView();
+        abstractSingleFormatBirtView.setDataSource(birtDataServiceConfiguration.dataSource());
+        abstractSingleFormatBirtView.setBirtEngine(engine().getObject());
+        abstractSingleFormatBirtView.setReportName("detail.rptdesign");
+        abstractSingleFormatBirtView.setReportsDirectory("Reports");
+        return abstractSingleFormatBirtView;
     }
-*/
+
+    @Bean
+    public BeanNameViewResolver beanNameResolver() {
+        BeanNameViewResolver bnvr = new BeanNameViewResolver();
+        bnvr.setOrder(1);
+        return bnvr;
+    }
+
     @Bean
     public BirtEngineFactory engine() {
         return new BirtEngineFactory();

@@ -16,14 +16,19 @@ import javax.sql.DataSource;
  * @author Jason Weathersby
  */
 public class BirtViewResolver extends UrlBasedViewResolver {
-	
 
-	
+
+    private String reportsDirectory = "";
+
     private IReportEngine birtEngine;
     private DataSource dataSource;
     private int taskType;
     private Map reportParameters = null;
-    
+
+    public void setReportsDirectory(String reportsDirectory) {
+        this.reportsDirectory = reportsDirectory;
+    }
+
 
     public BirtViewResolver(){
         setViewClass(AbstractSingleFormatBirtView.class);
@@ -44,12 +49,15 @@ public class BirtViewResolver extends UrlBasedViewResolver {
     public void setReportParameters(Map reportParameters){
         this.reportParameters = reportParameters;
     }
+
     @Override
     protected AbstractUrlBasedView buildView(String viewName) throws Exception {
         AbstractSingleFormatBirtView view = (AbstractSingleFormatBirtView) super.buildView(viewName);
-        view.setDataSource( this.dataSource);
+        view.setDataSource(this.dataSource);
         view.setBirtEngine(this.birtEngine);
         view.setReportParameters(this.reportParameters);
+        view.setReportName(viewName);
+        view.setReportsDirectory(this.reportsDirectory);
         return view;
     }
 
