@@ -1,12 +1,11 @@
 package org.eclipse.birt.spring.core;
 
-import java.util.Map;
-
 import org.eclipse.birt.report.engine.api.IReportEngine;
 import org.springframework.web.servlet.view.AbstractUrlBasedView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 import javax.sql.DataSource;
+import java.util.Map;
 
 /**
  * Simple {@link org.springframework.web.servlet.ViewResolver} that translates the URL of the report into a report name
@@ -30,7 +29,7 @@ public class BirtViewResolver extends UrlBasedViewResolver {
     }
 
 
-    public BirtViewResolver(){
+    public BirtViewResolver() {
         setViewClass(AbstractSingleFormatBirtView.class);
         setSuffix(".rptdesign");
     }
@@ -39,14 +38,15 @@ public class BirtViewResolver extends UrlBasedViewResolver {
         this.birtEngine = birtEngine;
     }
 
-    public void setDataSource(DataSource dataSource){
+    public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public void setTaskType(int taskType){
+    public void setTaskType(int taskType) {
         this.taskType = taskType;
     }
-    public void setReportParameters(Map reportParameters){
+
+    public void setReportParameters(Map reportParameters) {
         this.reportParameters = reportParameters;
     }
 

@@ -13,8 +13,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
-
-import java.io.File;
 import java.io.FileInputStream;
 import java.util.*;
 
@@ -259,7 +257,7 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 
     private String canonicalizeName(String reportName) {
         ///Assert.hasText(reportName);
-        if(!StringUtils.hasText( reportName ))
+        if (!StringUtils.hasText(reportName))
             return null;
 
         return !reportName.toLowerCase().endsWith(".rptdesign") ? reportName + ".rptdesign" : reportName;
@@ -287,7 +285,7 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 
             // todo String requestDocumentNameParameter = request.getParameter(this.documentNameRequestParameter);
 
-            String fullReportName =   reportName;
+            String fullReportName = reportName;
 //            String documentName = StringUtils.hasText(requestDocumentNameParameter) ?
 //                    requestDocumentNameParameter : getDefaultDocumentLocation(reportName);
 

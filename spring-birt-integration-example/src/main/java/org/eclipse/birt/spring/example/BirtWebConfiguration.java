@@ -1,18 +1,12 @@
 package org.eclipse.birt.spring.example;
 
-import java.util.HashMap;
-
 import org.eclipse.birt.spring.core.AbstractSingleFormatBirtView;
 import org.eclipse.birt.spring.core.BirtEngineFactory;
 import org.eclipse.birt.spring.core.BirtViewResolver;
 import org.eclipse.birt.spring.core.HtmlSingleFormatBirtView;
-import org.eclipse.birt.spring.core.MultiFormatBirtView;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
