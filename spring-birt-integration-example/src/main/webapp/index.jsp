@@ -7,7 +7,7 @@
 <c:url value="/images/fez-diagram.jpg" var="fez"/>
 <c:url value="/TopNPercent" var="topNPercent"/>
 <c:url value="/SampleSpring" var="sampleSpring"/>
-<c:url value="/masterreport" var="master"/>
+<c:url value="/masterReport" var="master"/>
 <c:url value="/DashBoard" var="dashboard"/>
 <c:url value="/SubReports" var="subReports"/>
 
@@ -28,7 +28,6 @@
 <br/>
 <a href="${subReports}">Sub Reports Example</a>
 <br/>
-<a href="${dynamicExample}">Top N PDF</a>
 
 </body>
 </html>

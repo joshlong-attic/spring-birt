@@ -70,7 +70,18 @@ public class BirtWebConfiguration extends WebMvcConfigurerAdapter {
         abstractSingleFormatBirtView.setReportsDirectory("Reports");
         return abstractSingleFormatBirtView;
     }
-
+    
+    @Bean(name = "masterReport")
+    public AbstractSingleFormatBirtView masterReportView() throws Throwable {
+        HtmlSingleFormatBirtView abstractSingleFormatBirtView = new HtmlSingleFormatBirtView();
+        abstractSingleFormatBirtView.setDataSource(birtDataServiceConfiguration.dataSource());
+        abstractSingleFormatBirtView.setBirtEngine(engine().getObject());
+        abstractSingleFormatBirtView.setReportName("masterreport.rptdesign");
+        MasterActionHandler mah = new MasterActionHandler();
+        abstractSingleFormatBirtView.setHtmlActionHandler(mah);
+        abstractSingleFormatBirtView.setReportsDirectory("Reports");
+        return abstractSingleFormatBirtView;
+    }
     @Bean
     public BeanNameViewResolver beanNameResolver() {
         BeanNameViewResolver bnvr = new BeanNameViewResolver();

@@ -25,5 +25,13 @@ public class BirtReportController {
 
         return new ModelAndView("orderDetails", modelData);
     }
+    @RequestMapping("/masterReport")
+    public ModelAndView masterReport() {
+
+        Map<String, Object> modelData = new HashMap<String, Object>();
+        
+
+        return new ModelAndView("masterReport", modelData);
+    }
 
 }
