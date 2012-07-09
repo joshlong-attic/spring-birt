@@ -20,10 +20,18 @@ public class PdfSingleFormatBirtView extends AbstractSingleFormatBirtView {
 
     public PdfSingleFormatBirtView() {
         setContentType("application/pdf");
+	
     }
 
     @Override
     protected RenderOption renderReport(Map<String, Object> map, HttpServletRequest request, HttpServletResponse response, BirtViewResourcePathCallback resourcePathCallback, Map<String, Object> appContextValuesMap, String reportName, String format, IRenderOption options) throws Throwable {
+
+    	String oName = reportName;
+    	if( oName.toLowerCase().endsWith(".rptdesign")){
+    		oName = oName.replaceAll("(?i).rptdesign", "");
+    	}
+    	
+    	response.setHeader ("Content-Disposition","attachment; filename="+oName +".pdf");		
 
         PDFRenderOption pdfOptions = new PDFRenderOption(options);
         pdfOptions.setOutputFormat("pdf");

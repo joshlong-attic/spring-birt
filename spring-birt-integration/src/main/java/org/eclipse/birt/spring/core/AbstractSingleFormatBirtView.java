@@ -75,6 +75,8 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
     private String requestEncoding = "UTF-8";
 
     private String renderRange = null;
+    
+    private String reportOutputFormat = "html";
 
     private Map<String, Object> reportParameters = new HashMap<String, Object>();
 
@@ -86,6 +88,9 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
         this.reportName = reportName;
     }
 
+    public void setReportOutputFormat(String format){
+    	this.reportOutputFormat = format;
+    }
     /**
      * This method allows you to set the implementation of the Resource callback class for implementing
      * location logic for resource folder, image folder, reports folder, documents folder, baseURL and baseImageURL
@@ -262,7 +267,13 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 
         return !reportName.toLowerCase().endsWith(".rptdesign") ? reportName + ".rptdesign" : reportName;
     }
+    private String canonicalizeDocName(String docName) {
+        ///Assert.hasText(reportName);
+        if (!StringUtils.hasText(docName))
+            return null;
 
+        return !docName.toLowerCase().endsWith(".rptdocument") ? docName + ".rptdocument" : docName;
+    }
     @SuppressWarnings("unchecked")
     protected void renderMergedOutputModel(Map<String, Object> modelData, HttpServletRequest request, HttpServletResponse response) throws Exception {
         FileInputStream fis = null;
@@ -281,16 +292,22 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
 
             String reportName;
             reportName = StringUtils.hasText(this.reportName) ? this.reportName : request.getParameter(this.reportNameRequestParameter);    // 'cat'
-            reportName = canonicalizeName(reportName);
+            String fullReportName = canonicalizeName(reportName);
 
-            // todo String requestDocumentNameParameter = request.getParameter(this.documentNameRequestParameter);
-
-            String fullReportName = reportName;
-//            String documentName = StringUtils.hasText(requestDocumentNameParameter) ?
-//                    requestDocumentNameParameter : getDefaultDocumentLocation(reportName);
-
-            String format = request.getParameter(this.reportFormatRequestParameter);
-
+            String documentName;
+            documentName = StringUtils.hasText(this.documentName) ? this.documentName : request.getParameter(this.documentNameRequestParameter);    // 'cat'
+            String fullDocumentName = canonicalizeDocName(documentName);
+            if( documentName == null){
+            	fullDocumentName = reportName.replaceAll(".rptdesign", ".rptdocument");
+            }
+            
+            
+            String format;
+            if( this.reportOutputFormat != null){
+            	format = this.reportOutputFormat;
+            }else{
+            	format= request.getParameter(this.reportFormatRequestParameter);
+            }
             ServletContext sc = request.getServletContext(); /// avoid creating an HTTP session if possible.
 
             if (format == null) {
@@ -344,10 +361,10 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
                     IRunTask runTask = (IRunTask) task;
                     for (String k : appContextMap.keySet())
                         runTask.getAppContext().put(k, appContextMap.get(k));
-                    String pathForDocument = birtViewResourcePathCallback.pathForDocument(sc, request, documentName);
+                    String pathForDocument = birtViewResourcePathCallback.pathForDocument(sc, request, fullDocumentName);
                     runTask.run(pathForDocument);
                     runTask.close();
-                    document = birtEngine.openReportDocument(documentName, pathForDocument, mapOfOptions);
+                    document = birtEngine.openReportDocument(fullDocumentName, pathForDocument, mapOfOptions);
                     task = birtEngine.createRenderTask(document);
                     IRenderTask renderTask = (IRenderTask) task;
                     IRenderOption options = null == this.renderOption ? new RenderOption() : this.renderOption;
@@ -356,10 +373,11 @@ abstract public class AbstractSingleFormatBirtView extends AbstractUrlBasedView 
                             appContextMap, reportName, format, options);
                     for (String k : appContextMap.keySet())
                         renderTask.getAppContext().put(k, appContextMap.get(k));
-                    renderTask.setRenderOption(returnedRenderOptions);
-                    if (renderRange == null) {
+                    if (renderRange != null) {
+                    	
                         renderTask.setPageRange(renderRange);
                     }
+                    renderTask.setRenderOption(returnedRenderOptions);
                     renderTask.render();
                     renderTask.close();
                     document.close();
@@ -499,7 +517,14 @@ class SimpleBirtViewResourcePathPathCallback implements AbstractSingleFormatBirt
     }
 
     public String pathForDocument(ServletContext sc, HttpServletRequest request, String documentName) throws Throwable {
-        return sc.getRealPath(documentsFolder) + documentName;
+        
+        String folder = sc.getRealPath(documentsFolder);
+
+        if (!folder.endsWith("/"))
+            folder = folder + "/";
+
+        return folder + documentName;
+    	
     }
 
 

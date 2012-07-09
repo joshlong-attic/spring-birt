@@ -10,7 +10,7 @@ import java.util.Map;
 public class MultiFormatBirtView extends AbstractSingleFormatBirtView {
 
     public MultiFormatBirtView() {
-        setContentType("application/pdf");
+        setContentType("application/octet-stream");
     }
 
     @Override
@@ -20,12 +20,13 @@ public class MultiFormatBirtView extends AbstractSingleFormatBirtView {
         rOptions.setOutputFormat(format);
         rOptions.setOutputStream(response.getOutputStream());
 
-        String att = "download." + format;
-        String uReportName = reportName.toUpperCase();
-        if (uReportName.endsWith(".RPTDESIGN")) {
-            att = uReportName.replace(".RPTDESIGN", "." + format);
-        }
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + att + "\"");
+
+    	String oName = reportName;
+    	if( oName.toLowerCase().endsWith(".rptdesign")){
+    		oName = oName.replaceAll("(?i).rptdesign", "");
+    	}
+    	String att = oName  + "." + format;
+    	response.setHeader("Content-Disposition", "attachment; filename=\"" + att + "\"");
 
         return rOptions;
     }
